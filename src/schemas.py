@@ -38,6 +38,14 @@ class QueryPlan(BaseModel):
     queries: list[str] = Field(default_factory=list)
 
 
+class EvidenceItem(BaseModel):
+    claim: str
+    detail: str
+    source_title: str | None = None
+    source_url: str | None = None
+    confidence: Literal["high", "medium", "low"] | None = None
+
+
 class TechAnalysis(BaseModel):
     startup_id: str
     name: str
