@@ -5,6 +5,22 @@
 이 문서는 LangGraph 기반 제조업 AI 스타트업 투자 평가 파이프라인의 전체 연결 구조, 상태 전달 방식, 에이전트 계약, 역할 분담을 고정하기 위한 협업 기준서다.  
 목표는 팀원 간 인터페이스 충돌을 막고, 상태 필드와 입출력 포맷 변경 시 영향 범위를 빠르게 판단할 수 있게 만드는 것이다.
 
+## 1번 담당 범위
+
+1번의 책임 범위는 `오케스트레이션 + 스타트업 탐색 시작부`다.
+
+- 그래프 시작점과 라우팅 규칙을 정의하고 유지한다.
+- `GraphState` 중 탐색 시작부와 연결되는 공통 상태를 관리한다.
+- `startup_search -> company_summary` 구간의 입력/출력 계약을 고정한다.
+- 후보 반복 평가 시 다음 후보 선택과 상태 초기화 규칙이 유지되도록 한다.
+
+### 1번 주요 산출물
+
+- 그래프 흐름 설명
+- 스타트업 후보 리스트(`candidate_startups`)
+- 현재 평가 대상(`selected_startup`)
+- 기업 프로필 JSON(`startup_profile`)
+
 ## 전체 그래프 흐름
 
 기본 흐름은 아래와 같다.
@@ -80,6 +96,7 @@ startup_search
 - 실패 처리
   - 후보가 하나도 없으면 예외를 발생시킨다.
   - 다음 후보 선택 시에는 분석 결과 필드를 초기화한다.
+  - 후보를 모두 평가한 뒤에는 `selected_startup=None`, `search_done=True` 로 종료 상태를 반환한다.
 
 ### `company_summary`
 
@@ -155,7 +172,10 @@ startup_search
 
 | 생산자 | 출력 필드 | 형식 | 소비자 | 설명 |
 | --- | --- | --- | --- | --- |
+| `startup_search` | `candidate_startups` | `list[StartupCandidate]` | `startup_search`, 라우터 | 검색된 후보 전체 목록 |
+| `startup_search` | `current_index` | `int` | `startup_search`, `investment_decision` | 현재 평가 중인 후보 위치 |
 | `startup_search` | `selected_startup` | `StartupCandidate` | `company_summary` | 대상 기업 최소 프로필 |
+| `startup_search` | `search_done` | `bool` | 라우터 | 후보 평가 종료 여부 |
 | `company_summary` | `startup_profile` | `StartupProfile` | `tech_analysis`, `market_analysis`, `competitor_analysis`, `investment_decision` | 정규화된 기업 개요 |
 | `tech_analysis` | `tech_analysis` | `TechAnalysis` | `competitor_analysis`, `investment_decision`, `report_writer` | 기술/배포성 평가 |
 | `tech_analysis` | `tech_references` | `list[str]` | `investment_decision`, `report_writer` | 기술 분석 근거 |
@@ -210,7 +230,7 @@ startup_search
 
 | 역할 | 주 담당 파일 | 수정 가능 범위 | 가능하면 건드리지 말아야 할 파일 |
 | --- | --- | --- | --- |
-| 1번 | `src/graph.py`, `src/state.py`, `docs/orchestration.md` | 그래프 연결, 라우터, 공통 상태 | 분석 agent 내부 로직 세부 구현 |
+| 1번 | `src/graph.py`, `src/state.py`, `src/agents/startup_search.py`, `src/agents/company_summary.py`, `docs/orchestration.md` | 그래프 연결, 라우터, 공통 상태, 스타트업 탐색 시작부, 기업 프로필 생성 연결 | 분석 agent 내부 로직 세부 구현 |
 | 2번 | `src/rag/index_builder.py`, `src/rag/retriever.py`, `docs/rag_rules.md` | 문서 인덱싱, chunking, metadata, 검색 출력 | 투자 판단 스키마 |
 | 3번 | `src/agents/tech_analysis.py`, `src/agents/market_analysis.py`, `src/agents/competitor_analysis.py`, `src/agents/investment_decision.py` | 분석 구조, 점수 로직 | 그래프 상태 필드 계약 |
 | 4번 | `src/agents/report_writer.py`, `docs/report_format.md`, `docs/demo_scenarios.md` | 최종 보고서 형식, 데모 흐름 | RAG 전처리 규칙 |
