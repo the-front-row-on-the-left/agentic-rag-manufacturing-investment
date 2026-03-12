@@ -31,15 +31,15 @@ def startup_router(state: GraphState) -> str:
 def decision_router(state: GraphState) -> str:
     decision = state.get("investment_decision")
     if not decision:
-        return "report_writer"
+        return REPORT_WRITER_NODE
     if decision.decision == "recommend":
-        return "report_writer"
+        return REPORT_WRITER_NODE
 
     candidate_startups = state.get("candidate_startups", [])
     current_index = state.get("current_index", -1)
     if current_index + 1 < len(candidate_startups):
-        return "startup_search"
-    return "report_writer"
+        return STARTUP_SEARCH_NODE
+    return REPORT_WRITER_NODE
 
 
 def build_graph(settings: Settings):
