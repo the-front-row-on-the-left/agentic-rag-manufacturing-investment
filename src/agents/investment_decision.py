@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from src.agents.base import BaseAgent
 from src.prompts import INVESTMENT_DECISION_SYSTEM
-from src.scoring import finalize_investment_decision
 from src.schemas import InvestmentDecisionDraft
+from src.scoring import finalize_investment_decision
 from src.state import GraphState
 from src.utils.text import model_to_pretty_json
 
@@ -48,13 +48,15 @@ class InvestmentDecisionAgent(BaseAgent):
             "market_analysis": market_analysis.model_dump(),
             "competitor_analysis": competitor_analysis.model_dump(),
             "investment_decision": final_decision.model_dump(),
-            "references": sorted(set(
-                [
-                    *state.get("tech_references", []),
-                    *state.get("market_references", []),
-                    *state.get("competitor_references", []),
-                ]
-            )),
+            "references": sorted(
+                set(
+                    [
+                        *state.get("tech_references", []),
+                        *state.get("market_references", []),
+                        *state.get("competitor_references", []),
+                    ]
+                )
+            ),
         }
 
         updates = {
