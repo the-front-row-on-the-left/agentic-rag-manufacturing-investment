@@ -54,7 +54,7 @@ class TechAnalysis(BaseModel):
     strengths: list[str] = Field(default_factory=list)
     limitations: list[str] = Field(default_factory=list)
     integration_constraints: list[str] = Field(default_factory=list)
-    evidence: list[str] = Field(default_factory=list)
+    evidence: list[EvidenceItem] = Field(default_factory=list)
 
 
 class MarketAnalysis(BaseModel):
@@ -66,7 +66,7 @@ class MarketAnalysis(BaseModel):
     demand_drivers: list[str] = Field(default_factory=list)
     customer_pain_points: list[str] = Field(default_factory=list)
     roi_points: list[str] = Field(default_factory=list)
-    evidence: list[str] = Field(default_factory=list)
+    evidence: list[EvidenceItem] = Field(default_factory=list)
 
 
 class CompetitorComparisonPoint(BaseModel):
@@ -92,6 +92,7 @@ class CompetitorAnalysis(BaseModel):
     competitors: list[Competitor] = Field(default_factory=list)
     differentiation: list[str] = Field(default_factory=list)
     risks: list[str] = Field(default_factory=list)
+    evidence: list[EvidenceItem] = Field(default_factory=list)
 
 
 class CriterionAssessment(BaseModel):
