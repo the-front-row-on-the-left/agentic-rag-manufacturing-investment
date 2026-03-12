@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-# weasyprint, markdown 은 다음 이슈(의존성 추가) 완료 후 top-level import로 이동
+import markdown as _markdown_lib
+from weasyprint import CSS as _CSS, HTML as _HTML
 
 _CSS_STRING = """
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
@@ -130,8 +131,7 @@ code {
 
 def md_to_html(md_text: str) -> str:
     """마크다운 문자열을 완전한 HTML 문자열로 변환한다."""
-    import markdown  # 다음 이슈(의존성 추가) 완료 후 top-level로 이동
-    body = markdown.markdown(
+    body = _markdown_lib.markdown(
         md_text,
         extensions=["tables", "fenced_code", "nl2br"],
     )
@@ -149,9 +149,8 @@ def md_to_html(md_text: str) -> str:
 
 def html_to_pdf(html_text: str, pdf_path: Path) -> None:
     """HTML 문자열을 PDF 파일로 변환한다."""
-    from weasyprint import CSS, HTML  # 다음 이슈(의존성 추가) 완료 후 top-level로 이동
-    css = CSS(string=_CSS_STRING)
-    HTML(string=html_text).write_pdf(
+    css = _CSS(string=_CSS_STRING)
+    _HTML(string=html_text).write_pdf(
         target=str(pdf_path),
         stylesheets=[css],
     )
@@ -161,6 +160,5 @@ def export_report(md_path: Path, html_path: Path, pdf_path: Path) -> None:
     """마크다운 보고서를 HTML과 PDF로 동시 출력한다."""
     md_text = md_path.read_text(encoding="utf-8")
     html_text = md_to_html(md_text)
-
     html_path.write_text(html_text, encoding="utf-8")
     html_to_pdf(html_text, pdf_path)
