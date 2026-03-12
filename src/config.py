@@ -17,7 +17,6 @@ class Settings:
     base_dir: Path
     data_dir: Path
     rag_docs_dir: Path
-    chroma_dir: Path
     output_dir: Path
     openai_api_key: str
     openai_model: str
@@ -30,7 +29,9 @@ class Settings:
     chunk_overlap: int
     top_k_tech: int
     top_k_market: int
-    chroma_collection_name: str = "manufacturing_startup_eval"
+    qdrant_url: str
+    qdrant_api_key: str | None
+    qdrant_collection_name: str
 
 
 def _require_env(name: str) -> str:
@@ -49,14 +50,12 @@ def get_settings(
     base_dir = BASE_DIR
     data_dir = base_dir / "data"
     rag_docs_dir = data_dir / "rag_docs"
-    chroma_dir = data_dir / "chroma"
     output_dir = base_dir / "outputs"
 
     return Settings(
         base_dir=base_dir,
         data_dir=data_dir,
         rag_docs_dir=rag_docs_dir,
-        chroma_dir=chroma_dir,
         output_dir=output_dir,
         openai_api_key=_require_env("OPENAI_API_KEY"),
         openai_model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini").strip(),
@@ -69,4 +68,9 @@ def get_settings(
         chunk_overlap=int(os.getenv("CHUNK_OVERLAP", "200")),
         top_k_tech=int(os.getenv("TOP_K_TECH", "6")),
         top_k_market=int(os.getenv("TOP_K_MARKET", "6")),
+        qdrant_url=os.getenv("QDRANT_URL", "http://localhost:6333").strip(),
+        qdrant_api_key=os.getenv("QDRANT_API_KEY", "").strip() or None,
+        qdrant_collection_name=os.getenv(
+            "QDRANT_COLLECTION_NAME", "manufacturing_startup_eval"
+        ).strip(),
     )

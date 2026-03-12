@@ -31,11 +31,6 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Maximum number of startup candidates to evaluate.",
     )
-    parser.add_argument(
-        "--rebuild-index",
-        action="store_true",
-        help="Rebuild the local Chroma index from PDFs in data/rag_docs.",
-    )
     return parser.parse_args()
 
 
@@ -48,7 +43,7 @@ def main() -> None:
     )
     ensure_dir(settings.output_dir)
 
-    graph = build_graph(settings=settings, rebuild_index=args.rebuild_index)
+    graph = build_graph(settings=settings)
 
     initial_state: dict[str, Any] = {
         "input_keyword": settings.input_keyword,
