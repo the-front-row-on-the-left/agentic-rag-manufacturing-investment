@@ -56,9 +56,26 @@ Thumbs.db
 
 # Local env and secrets
 .env
+.env.*
+!.env.example
 
 # Logs
 *.log
 
 # uv
 .uv/
+
+# Project outputs
+outputs/
+
+# Local vector store / caches
+data/chroma/
+.cache/
+
+# Local RAG inputs
+data/rag_docs/*.pdf
+
+# Generic local databases
+*.db
+*.sqlite
+*.sqlite3

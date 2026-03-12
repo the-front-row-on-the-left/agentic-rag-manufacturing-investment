@@ -96,3 +96,46 @@ source .venv/bin/activate
 
 > 이미 `pyproject.toml`에 `requires-python = ">=3.11"`가 설정되어 있으면
 > Python 3.11 이상을 기준으로 관리됩니다.
+# AI Startup Investment Evaluation Agent (Manufacturing)
+
+제조업 AI 스타트업 투자 가능성을 평가하기 위한 LangGraph 기반 멀티 에이전트 + Agentic RAG 프로젝트입니다.
+
+## Quick Start
+
+```bash
+uv sync
+cp .env.example .env
+```
+
+기존 활성 가상환경이 있으면 끄고 실행하는 편이 안전합니다.
+```bash
+deactivate  # already active virtualenv only
+uv sync
+```
+
+`data/rag_docs/manifest.sample.json`을 참고해서 RAG 문서를 넣고 `manifest.json`으로 복사한 뒤 실행하세요.
+
+```bash
+uv run python app.py --keyword "manufacturing AI startup" --max-candidates 5
+```
+
+생성 결과:
+- `outputs/final_report_*.md`
+- `outputs/final_state_*.json`
+
+## Architecture
+
+- startup_search
+- company_summary
+- tech_analysis (RAG)
+- market_analysis (RAG)
+- competitor_analysis
+- investment_decision
+- report_writer
+
+## Notes
+
+- 외부 웹 검색: Tavily
+- 임베딩: BAAI/bge-m3
+- 벡터스토어: Chroma
+- LLM: OpenAI Chat model via `langchain-openai`

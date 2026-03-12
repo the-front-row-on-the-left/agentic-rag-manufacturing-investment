@@ -1,0 +1,36 @@
+{
+  "documents": [
+    {
+      "file": "docs1.pdf",
+      "title": "Artificial Intelligence Diffusion and Applications in Manufacturing",
+      "organization": "OECD",
+      "year": 2021,
+      "domain": "manufacturing_ai",
+      "description": "OECD report analyzing the diffusion, adoption, and applications of artificial intelligence technologies across manufacturing industries."
+    },
+    {
+      "file": "docs2.pdf",
+      "title": "Industrial AI Implementation Strategies and Key Considerations",
+      "organization": "MEP National Network",
+      "year": 2022,
+      "domain": "industrial_ai",
+      "description": "Guide describing how manufacturers can adopt industrial AI, including data preparation, operational considerations, and implementation strategies."
+    },
+    {
+      "file": "docs3.pdf",
+      "title": "World Manufacturing Report 2024: Future of Global Manufacturing",
+      "organization": "World Manufacturing Foundation",
+      "year": 2024,
+      "domain": "manufacturing_trends",
+      "description": "Global manufacturing outlook analyzing economic, technological, and geopolitical trends shaping manufacturing toward 2030."
+    },
+    {
+      "file": "docs4.pdf",
+      "title": "Artificial Intelligence Opportunities and Challenges in Manufacturing",
+      "organization": "Manufacturing Leadership Council",
+      "year": 2023,
+      "domain": "ai_manufacturing_adoption",
+      "description": "Industry report discussing opportunities, risks, and adoption patterns of AI technologies in manufacturing companies."
+    }
+  ]
+}
