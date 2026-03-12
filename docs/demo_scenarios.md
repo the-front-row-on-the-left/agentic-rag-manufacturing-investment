@@ -86,6 +86,14 @@
 - `outputs/final_state_*.json` 이 생성되었는가
 - 보고서에 References 섹션이 포함되었는가
 
+### 1번 시작부 검증 포인트
+
+- `candidate_startups` 가 비어 있지 않고 제조업 AI 후보로 읽히는가
+- `selected_startup` 이 현재 또는 마지막 평가 대상 포인터로 해석되는가
+- `startup_profile` 이 채워지고, 회사 개요와 핵심 제품이 일관되게 요약되는가
+- 첫 후보가 `hold` 또는 `conditional_review` 일 때 다음 후보로 이동한 흔적이 `current_index`, `evaluation_history` 에 남는가
+- 최종 추천 결과는 `selected_startup` 이 아니라 `recommended_startups` 와 `evaluation_history` 로 읽히는가
+
 ## 발표 분담
 
 | 담당 | 발표 구간 |
