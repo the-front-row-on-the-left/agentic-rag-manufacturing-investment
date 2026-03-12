@@ -93,7 +93,12 @@ class AgenticRAGRetriever:
         seen: set[tuple[str, int, str]] = set()
 
         for query in queries:
-            docs = self.vector_store.similarity_search(query, k=max(per_query_k * 2, per_query_k))
+            docs = self.vector_store.max_marginal_relevance_search(
+                query,
+                k=per_query_k,
+                fetch_k=max(per_query_k * 4, per_query_k),
+                lambda_mult=0.5,
+            )
             for doc in docs:
                 metadata = dict(doc.metadata)
                 tags_text = str(metadata.get("tags_text", ""))
