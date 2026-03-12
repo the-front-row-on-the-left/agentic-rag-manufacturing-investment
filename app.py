@@ -10,6 +10,12 @@ from src.config import get_settings
 from src.graph import build_graph
 from src.utils.io import ensure_dir, to_jsonable
 
+try:
+    from src.utils.pdf_export import export_report
+    _PDF_AVAILABLE = True
+except ImportError:
+    _PDF_AVAILABLE = False
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -74,11 +80,28 @@ def main() -> None:
     report_path = settings.output_dir / f"final_report_{timestamp}.md"
     state_path = settings.output_dir / f"final_state_{timestamp}.json"
 
-    report_path.write_text(final_state.get("final_report_markdown", ""), encoding="utf-8")
+    md_content = final_state.get("final_report_markdown", "")
+    report_path.write_text(md_content, encoding="utf-8")
     state_path.write_text(
         json.dumps(to_jsonable(final_state), ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
+    if _PDF_AVAILABLE:
+        html_path = settings.output_dir / f"final_report_{timestamp}.html"
+        pdf_path = settings.output_dir / f"final_report_{timestamp}.pdf"
+        try:
+            export_report(
+                md_path=report_path,
+                html_path=html_path,
+                pdf_path=pdf_path,
+            )
+            print(f"[html]   {html_path}")
+            print(f"[pdf]    {pdf_path}")
+        except Exception as e:
+            print(f"[warn]   HTML/PDF 변환 실패: {e}")
+    else:
+        print("[warn]   weasyprint 미설치 — HTML/PDF 출력 생략 (다음 이슈에서 의존성 추가 예정)")
 
     decision = final_state.get("investment_decision")
     if decision:
