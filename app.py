@@ -9,6 +9,7 @@ from typing import Any
 from src.config import get_settings
 from src.graph import build_graph
 from src.utils.io import ensure_dir, to_jsonable
+from src.utils.pdf_export import export_report
 
 try:
     from src.utils.pdf_export import export_report
@@ -78,6 +79,8 @@ def main() -> None:
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     report_path = settings.output_dir / f"final_report_{timestamp}.md"
+    html_path = settings.output_dir / f"final_report_{timestamp}.html"
+    pdf_path = settings.output_dir / f"final_report_{timestamp}.pdf"
     state_path = settings.output_dir / f"final_state_{timestamp}.json"
 
     md_content = final_state.get("final_report_markdown", "")
@@ -87,21 +90,16 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    if _PDF_AVAILABLE:
-        html_path = settings.output_dir / f"final_report_{timestamp}.html"
-        pdf_path = settings.output_dir / f"final_report_{timestamp}.pdf"
-        try:
-            export_report(
-                md_path=report_path,
-                html_path=html_path,
-                pdf_path=pdf_path,
-            )
-            print(f"[html]   {html_path}")
-            print(f"[pdf]    {pdf_path}")
-        except Exception as e:
-            print(f"[warn]   HTML/PDF 변환 실패: {e}")
-    else:
-        print("[warn]   weasyprint 미설치 — HTML/PDF 출력 생략 (다음 이슈에서 의존성 추가 예정)")
+    try:
+        export_report(
+            md_path=report_path,
+            html_path=html_path,
+            pdf_path=pdf_path,
+        )
+        print(f"[html]   {html_path}")
+        print(f"[pdf]    {pdf_path}")
+    except Exception as e:
+        print(f"[warn]   HTML/PDF 변환 실패: {e}")
 
     decision = final_state.get("investment_decision")
     if decision:
