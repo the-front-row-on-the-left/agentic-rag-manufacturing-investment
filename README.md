@@ -1,141 +1,71 @@
 # Agentic-rag-manufacturing-investment
 
-## 1. 프로젝트 개요
+제조업 AI 스타트업 투자 가능성 평가를 위한 LangGraph 기반 Agentic RAG 프로젝트입니다.
 
-이 저장소는 Git 협업 규칙과 코드 품질 체크를 문서로 정리해 둔 구성입니다.
+## 시작하기
 
-- Git 전략: `git_commit_and_merge_strategy.md`
-- pre-commit 규칙: `pre_commit_rules.md`
+### 1) 환경
 
-아래는 두 문서의 간단 정리본입니다.
+- Python: `3.11`
+- 패키지 관리: `uv`
 
-## 2. Git/Merge 전략 요약
+### 2) 설치
 
-- 모든 작업은 브랜치에서 수행
-- `main`은 직접 푸시/직접 머지 금지
-- `main` 반영은 PR(리뷰) 기준으로 진행
-- PR 전 `main` 기준으로 rebase 후 충돌 해결
-- 커밋 메시지는 `type: 변경 내용 요약` 형식
-  - 허용 타입: `feature`, `fix`, `chore`, `docs`, `style`, `delete`, `refactor`
-- 작은 단위 PR 권장, PR 본문에 변경 목적/요약/검증 내역 기재
-- 머지 전 검증은 기본적으로 pre-commit 및 테스트 통과
+```bash
+uv python install 3.11
+uv venv --python 3.11
+uv sync
+```
 
-추천 커밋 타입 예시:
+### 3) 실행
+
+```bash
+cp .env.example .env
+uv run python app.py --keyword "manufacturing AI startup" --max-candidates 5
+```
+
+### 4) 결과 위치
+
+- `outputs/final_report_*.md`
+- `outputs/final_state_*.json`
+
+## 워크플로우 정리
+
+### Git/PR 규칙
+
+- 브랜치 단위로 작업하고 `main`에는 직접 커밋/직접 머지하지 않는다.
+- `main` 반영은 PR로만 수행한다.
+- PR 전 `git fetch` 후 `main` 기준으로 rebase 한다.
+- 커밋 메시지는 `type: 변경 내용 요약` 형식이다.
+- 허용 타입: `feature`, `fix`, `chore`, `docs`, `style`, `delete`, `refactor`
+
+### Commit 메시지 예시
 
 ```text
 feature: 신규 분석 에이전트 추가
 fix: JSON 파싱 오류 수정
-chore: pre-commit 설정 업데이트
-docs: 전략 문서 보강
+docs: Git 전략 문서 보강
+chore: 의존성 업데이트
 ```
 
-## 3. pre-commit 규칙 요약
+### pre-commit 규칙
 
-- 핵심 도구: **Ruff**
-  - `ruff check`
-  - `ruff format`
-- 커밋 전에 포맷/린트 이슈 최소화
-- 권장 실행:
-
-```bash
-ruff check .
-ruff format .
-```
-
-- 자동 수정까지 허용 시:
-
-```bash
-ruff check . --fix
-ruff format .
-```
-
-- pre-commit 기본 예시 훅
-  - `ruff`
-  - `ruff-format`
-  - `end-of-file-fixer`, `trailing-whitespace`, `check-yaml`, `check-json`, `check-merge-conflict` 등
-
-## 4. 시작하기 (Getting Started)
-
-필수 환경:
-
-- Python: `3.11`
-- 패키지/의존성 관리: `uv`
-
-### 4.1 환경 구성
-
-```bash
-# 1) Python 3.11 런타임 준비 (필요 시)
-uv python install 3.11
-
-# 2) 프로젝트 가상환경 생성 (3.11 지정)
-uv venv --python 3.11
-
-# 3) 의존성 동기화
-uv sync
-```
-
-### 4.2 의존성/도구 확인
-
-```bash
-uv run python -V
-uv run pre-commit --version
-```
-
-### 4.3 pre-commit 설정
+- 도구는 Ruff 기반이다.
+- 기본 검사: `ruff check .`
+- 기본 포맷: `ruff format .`
+- 권장 훅 실행:
 
 ```bash
 uv run pre-commit install
 uv run pre-commit run --all-files
 ```
 
-### 4.4 실행 환경 활성화(옵션)
+## 아키텍처
 
-```bash
-source .venv/bin/activate
-```
-
-> 이미 `pyproject.toml`에 `requires-python = ">=3.11"`가 설정되어 있으면
-> Python 3.11 이상을 기준으로 관리됩니다.
-# AI Startup Investment Evaluation Agent (Manufacturing)
-
-제조업 AI 스타트업 투자 가능성을 평가하기 위한 LangGraph 기반 멀티 에이전트 + Agentic RAG 프로젝트입니다.
-
-## Quick Start
-
-```bash
-uv sync
-cp .env.example .env
-```
-
-기존 활성 가상환경이 있으면 끄고 실행하는 편이 안전합니다.
-```bash
-deactivate  # already active virtualenv only
-uv sync
-```
-
-`data/rag_docs/manifest.sample.json`을 참고해서 RAG 문서를 넣고 `manifest.json`으로 복사한 뒤 실행하세요.
-
-```bash
-uv run python app.py --keyword "manufacturing AI startup" --max-candidates 5
-```
-
-생성 결과:
-- `outputs/final_report_*.md`
-- `outputs/final_state_*.json`
-
-## Architecture
-
-- startup_search
-- company_summary
-- tech_analysis (RAG)
-- market_analysis (RAG)
-- competitor_analysis
-- investment_decision
-- report_writer
-
-## Notes
-
-- 외부 웹 검색: Tavily
-- 임베딩: BAAI/bge-m3
-- 벡터스토어: Chroma
-- LLM: OpenAI Chat model via `langchain-openai`
+- `startup_search`
+- `company_summary`
+- `tech_analysis` (RAG)
+- `market_analysis` (RAG)
+- `competitor_analysis`
+- `investment_decision`
+- `report_writer`
