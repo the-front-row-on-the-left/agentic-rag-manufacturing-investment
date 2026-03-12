@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from operator import add
 from typing import Any
+from typing import Annotated
 
 from typing_extensions import TypedDict
 
@@ -47,7 +49,11 @@ class GraphState(TypedDict, total=False):
     # 누적 평가 결과
     recommended_startups: list[dict[str, Any]]
     held_startups: list[dict[str, Any]]
+    evaluation_history: list[dict[str, Any]]
+
+    # 라우팅 상태
+    search_done: bool
 
     # 보고서 출력
-    references: list[str]
+    references: Annotated[list[str], add]
     final_report_markdown: str
