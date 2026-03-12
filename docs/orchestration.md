@@ -57,6 +57,18 @@ startup_search
 6. `startup_router` 는 `selected_startup` 와 `search_done` 값을 보고 `company_summary` 또는 `report_writer` 로 보낸다.
 7. `company_summary` 는 `selected_startup` 을 입력으로 받아 검색 근거를 보강한 `startup_profile` 을 생성한다.
 
+### 후보 반복 평가 흐름
+
+이 그래프는 단일 후보만 보고 끝나는 구조가 아니라, 조건에 따라 다음 후보를 계속 평가하는 반복 구조다.
+
+1. `startup_search` 가 후보 목록을 만들고 첫 후보를 `selected_startup` 으로 선택한다.
+2. `company_summary -> tech_analysis -> market_analysis -> competitor_analysis -> investment_decision` 순서로 현재 후보를 평가한다.
+3. `investment_decision.decision` 이 `recommend` 이면 현재 후보를 `recommended_startups` 에 적재하고 `report_writer` 로 종료한다.
+4. `decision` 이 `hold` 또는 `conditional_review` 이면 현재 후보를 `held_startups`, `evaluation_history` 에 기록한다.
+5. 아직 평가하지 않은 후보가 남아 있으면 `startup_search` 로 돌아가 `current_index` 를 증가시키고 다음 후보를 `selected_startup` 으로 선택한다.
+6. 다음 후보를 고를 때 현재 후보 기준 분석 값은 초기화하고, 누적 기록은 유지한다.
+7. 모든 후보를 본 뒤에도 추천이 없으면 누적된 `evaluation_history` 기준으로 `report_writer` 가 최종 보고서를 생성한다.
+
 ### 탐색 정보와 프로필 근거 정보
 
 시작부에서는 모두 웹 검색을 사용하지만, `startup_search` 와 `company_summary` 의 정보 성격은 다르다.
@@ -106,6 +118,19 @@ startup_search
 | `evaluation_history` | `list[dict]` | `investment_decision` | `report_writer` | 모든 평가 결과 누적 |
 | `references` | `list[str]` | 각 분석 agent | `report_writer` | 전체 참고문헌 누적 |
 | `final_report_markdown` | `str` | `report_writer` | app 출력 | 최종 보고서 markdown |
+
+### 최종 상태 해석 기준
+
+최종 상태를 읽을 때는 아래처럼 해석한다.
+
+- `candidate_startups`: 이번 실행에서 발굴된 전체 후보 풀
+- `selected_startup`: 현재 또는 마지막으로 평가한 후보 포인터
+- `startup_profile`: `selected_startup` 기준으로 정규화된 현재 후보 정보
+- `recommended_startups`: 추천 판정을 받은 후보 목록
+- `held_startups`: 보류 또는 조건부 검토 판정을 받은 후보 목록
+- `evaluation_history`: 평가가 완료된 후보들의 누적 기록
+
+즉 최종 추천 기업을 해석할 때는 `selected_startup` 이 아니라 `recommended_startups` 와 `evaluation_history` 를 기준으로 본다.
 
 ## 에이전트 계약
 
