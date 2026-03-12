@@ -44,13 +44,7 @@ class CompanySummaryAgent(BaseAgent):
             system_prompt=COMPANY_SUMMARY_SYSTEM,
             user_prompt=user_prompt,
         )
-        profile.startup_id = selected.startup_id
-        profile.name = selected.name
-        profile.website = profile.website or selected.website
-        profile.country = profile.country or selected.country
-        profile.source_urls = dedupe_keep_order(
-            [*selected.source_urls, *profile.source_urls, *[r.url for r in results if r.url]]
-        )
+        profile = self._normalize_profile(profile, selected, results)
 
         new_references = self.search_tool.to_references(results)
 
@@ -58,3 +52,18 @@ class CompanySummaryAgent(BaseAgent):
             "startup_profile": profile,
             "references": new_references,
         }
+
+    @staticmethod
+    def _normalize_profile(
+        profile: StartupProfile,
+        selected,
+        results,
+    ) -> StartupProfile:
+        profile.startup_id = selected.startup_id
+        profile.name = selected.name
+        profile.website = profile.website or selected.website
+        profile.country = profile.country or selected.country
+        profile.source_urls = dedupe_keep_order(
+            [*selected.source_urls, *profile.source_urls, *[r.url for r in results if r.url]]
+        )
+        return profile
