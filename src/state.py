@@ -21,9 +21,10 @@ class GraphState(TypedDict, total=False):
     domain: str
     max_candidates: int
 
-    # Candidate pool and selection state
+    # Candidate pool and current pointer state
     candidate_startups: list[StartupCandidate]
     current_index: int
+    # selected_startup is the candidate currently being evaluated, not the final recommendation.
     selected_startup: StartupCandidate | None
     search_done: bool
 
@@ -37,7 +38,7 @@ class GraphState(TypedDict, total=False):
     competitor_references: list[str]
     investment_decision: InvestmentDecision | None
 
-    # Aggregated history across all evaluated candidates
+    # Aggregated history across all completed candidate evaluations
     recommended_startups: Annotated[list[dict[str, Any]], add]
     held_startups: Annotated[list[dict[str, Any]], add]
     evaluation_history: Annotated[list[dict[str, Any]], add]

@@ -35,6 +35,8 @@ def decision_router(state: GraphState) -> str:
     if decision.decision == "recommend":
         return REPORT_WRITER_NODE
 
+    # A non-recommend decision means the current candidate evaluation is complete,
+    # so the graph either advances the pointer to the next candidate or exits.
     candidate_startups = state.get("candidate_startups", [])
     current_index = state.get("current_index", -1)
     if current_index + 1 < len(candidate_startups):
