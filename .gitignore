@@ -69,7 +69,6 @@ Thumbs.db
 outputs/
 
 # Local vector store / caches
-data/chroma/
 .cache/
 
 # Local RAG inputs

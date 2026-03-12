@@ -1,0 +1,56 @@
+{
+  "documents": [
+    {
+      "doc_id": "docs1",
+      "filename": "docs1.pdf",
+      "title": "Artificial Intelligence Diffusion and Applications in Manufacturing",
+      "issuer": "OECD",
+      "year": "2021",
+      "source_type": "manufacturing_ai",
+      "tags": [
+        "manufacturing",
+        "ai",
+        "diffusion"
+      ]
+    },
+    {
+      "doc_id": "docs2",
+      "filename": "docs2.pdf",
+      "title": "Industrial AI Implementation Strategies and Key Considerations",
+      "issuer": "MEP National Network",
+      "year": "2022",
+      "source_type": "industrial_ai",
+      "tags": [
+        "industrial-ai",
+        "implementation",
+        "manufacturing"
+      ]
+    },
+    {
+      "doc_id": "docs3",
+      "filename": "docs3.pdf",
+      "title": "Artificial intelligence, data and competition",
+      "issuer": "OECD",
+      "year": "2024",
+      "source_type": "ai_competition_policy",
+      "tags": [
+        "ai",
+        "competition",
+        "data"
+      ]
+    },
+    {
+      "doc_id": "docs4",
+      "filename": "docs4.pdf",
+      "title": "Artificial Intelligence Opportunities and Challenges in Manufacturing",
+      "issuer": "Manufacturing Leadership Council",
+      "year": "2023",
+      "source_type": "ai_manufacturing_adoption",
+      "tags": [
+        "manufacturing",
+        "adoption",
+        "ai"
+      ]
+    }
+  ]
+}

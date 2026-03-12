@@ -3,8 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
-from langchain_chroma import Chroma
 from langchain_openai import ChatOpenAI
+from langchain_qdrant import QdrantVectorStore
 
 from src.schemas import QueryPlan, StartupProfile
 from src.utils.references import dedupe_keep_order, format_rag_reference
@@ -45,7 +45,7 @@ class RetrievedChunk:
 
 
 class AgenticRAGRetriever:
-    def __init__(self, llm: ChatOpenAI, vector_store: Chroma) -> None:
+    def __init__(self, llm: ChatOpenAI, vector_store: QdrantVectorStore) -> None:
         self.llm = llm
         self.vector_store = vector_store
 

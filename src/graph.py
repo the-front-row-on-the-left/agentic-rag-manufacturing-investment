@@ -37,7 +37,7 @@ def decision_router(state: GraphState) -> str:
     return "report_writer"
 
 
-def build_graph(settings: Settings, rebuild_index: bool = False):
+def build_graph(settings: Settings):
     llm = ChatOpenAI(
         api_key=settings.openai_api_key,
         model=settings.openai_model,
@@ -46,7 +46,7 @@ def build_graph(settings: Settings, rebuild_index: bool = False):
     search_tool = TavilySearchTool(api_key=settings.tavily_api_key)
 
     vector_store_manager = VectorStoreManager(settings=settings)
-    vector_store = vector_store_manager.build_or_load(rebuild=rebuild_index)
+    vector_store = vector_store_manager.load_existing()
     rag_retriever = AgenticRAGRetriever(llm=llm, vector_store=vector_store)
 
     startup_search_agent = StartupSearchAgent(llm, settings, search_tool)
