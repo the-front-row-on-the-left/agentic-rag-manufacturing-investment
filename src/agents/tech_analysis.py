@@ -58,7 +58,9 @@ class TechAnalysisAgent(BaseAgent):
             f"Startup profile:\n{model_to_pretty_json(profile)}\n\n"
             f"Web evidence:\n{self.search_tool.to_context(web_results)}\n\n"
             f"Local RAG evidence:\n{self.rag_retriever.to_context(rag_chunks)}\n\n"
-            "Analyze the startup's technology and real-world deployability in manufacturing."
+            "Analyze the startup's technology and real-world deployability in manufacturing.\n"
+            "Return `evidence` as a list of EvidenceItem objects "
+            "(claim, detail, source_title, source_url, confidence)."
         )
 
         tech_analysis: TechAnalysis = self.structured_invoke(
