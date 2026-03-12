@@ -16,25 +16,32 @@ from src.rag.retriever import AgenticRAGRetriever
 from src.state import GraphState
 from src.tools.web_search import TavilySearchTool
 
+STARTUP_SEARCH_NODE = "startup_search"
+COMPANY_SUMMARY_NODE = "company_summary"
+REPORT_WRITER_NODE = "report_writer"
+
 
 def startup_router(state: GraphState) -> str:
+    # startup_search owns both the initial entry and candidate re-entry path.
     if state.get("selected_startup") is None or state.get("search_done", False):
-        return "report_writer"
-    return "company_summary"
+        return REPORT_WRITER_NODE
+    return COMPANY_SUMMARY_NODE
 
 
 def decision_router(state: GraphState) -> str:
     decision = state.get("investment_decision")
     if not decision:
-        return "report_writer"
+        return REPORT_WRITER_NODE
     if decision.decision == "recommend":
-        return "report_writer"
+        return REPORT_WRITER_NODE
 
+    # A non-recommend decision means the current candidate evaluation is complete,
+    # so the graph either advances the pointer to the next candidate or exits.
     candidate_startups = state.get("candidate_startups", [])
     current_index = state.get("current_index", -1)
     if current_index + 1 < len(candidate_startups):
-        return "startup_search"
-    return "report_writer"
+        return STARTUP_SEARCH_NODE
+    return REPORT_WRITER_NODE
 
 
 def build_graph(settings: Settings):
@@ -59,26 +66,27 @@ def build_graph(settings: Settings):
 
     graph = StateGraph(GraphState)
 
-    graph.add_node("startup_search", startup_search_agent)
-    graph.add_node("company_summary", company_summary_agent)
+    graph.add_node(STARTUP_SEARCH_NODE, startup_search_agent)
+    graph.add_node(COMPANY_SUMMARY_NODE, company_summary_agent)
     graph.add_node("tech_analysis", tech_analysis_agent)
     graph.add_node("market_analysis", market_analysis_agent)
     graph.add_node("competitor_analysis", competitor_analysis_agent)
     graph.add_node("investment_decision", investment_decision_agent)
-    graph.add_node("report_writer", report_writer_agent)
+    graph.add_node(REPORT_WRITER_NODE, report_writer_agent)
 
-    graph.add_edge(START, "startup_search")
+    # Every run starts with startup discovery before any downstream analysis.
+    graph.add_edge(START, STARTUP_SEARCH_NODE)
     graph.add_conditional_edges(
-        "startup_search",
+        STARTUP_SEARCH_NODE,
         startup_router,
         {
-            "company_summary": "company_summary",
-            "report_writer": "report_writer",
+            COMPANY_SUMMARY_NODE: COMPANY_SUMMARY_NODE,
+            REPORT_WRITER_NODE: REPORT_WRITER_NODE,
         },
     )
 
-    graph.add_edge("company_summary", "tech_analysis")
-    graph.add_edge("company_summary", "market_analysis")
+    graph.add_edge(COMPANY_SUMMARY_NODE, "tech_analysis")
+    graph.add_edge(COMPANY_SUMMARY_NODE, "market_analysis")
     graph.add_edge("tech_analysis", "competitor_analysis")
     graph.add_edge("market_analysis", "competitor_analysis")
     graph.add_edge("competitor_analysis", "investment_decision")
@@ -86,10 +94,10 @@ def build_graph(settings: Settings):
         "investment_decision",
         decision_router,
         {
-            "startup_search": "startup_search",
-            "report_writer": "report_writer",
+            STARTUP_SEARCH_NODE: STARTUP_SEARCH_NODE,
+            REPORT_WRITER_NODE: REPORT_WRITER_NODE,
         },
     )
-    graph.add_edge("report_writer", END)
+    graph.add_edge(REPORT_WRITER_NODE, END)
 
     return graph.compile()
