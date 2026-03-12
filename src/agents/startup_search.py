@@ -77,10 +77,21 @@ class StartupSearchAgent(BaseAgent):
             if len(deduped) >= state["max_candidates"]:
                 break
 
-        if not deduped:
-            raise RuntimeError("No startup candidates were found from search results.")
-
         new_references = self.search_tool.to_references(search_results)
+        if not deduped:
+            return {
+                "selected_startup": None,
+                "search_done": True,
+                "references": new_references,
+                "startup_profile": None,
+                "tech_analysis": None,
+                "market_analysis": None,
+                "competitor_analysis": None,
+                "investment_decision": None,
+                "tech_references": [],
+                "market_references": [],
+                "competitor_references": [],
+            }
 
         return {
             "candidate_startups": deduped,

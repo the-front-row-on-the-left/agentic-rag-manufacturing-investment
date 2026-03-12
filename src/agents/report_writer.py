@@ -10,7 +10,10 @@ from src.utils.text import model_to_pretty_json
 class ReportWriterAgent(BaseAgent):
     def __call__(self, state: GraphState) -> dict:
         evaluation_history = state.get("evaluation_history", [])
-        references = dedupe_keep_order(state.get("references", []))
+        eval_refs = []
+        for item in evaluation_history:
+            eval_refs.extend(item.get("references", []))
+        references = dedupe_keep_order(eval_refs)
 
         if not evaluation_history:
             report = "# SUMMARY\n\n평가된 스타트업이 없습니다.\n\n# REFERENCE\n\n- 없음"
