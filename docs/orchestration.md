@@ -37,6 +37,18 @@ startup_search
 
 현재 구현상 `company_summary` 이후 `tech_analysis` 와 `market_analysis` 는 둘 다 실행되며, 두 결과가 준비된 뒤 `competitor_analysis` 로 합류한다.
 
+### 시작부 실행 흐름
+
+`startup_search` 와 `company_summary` 는 1번이 직접 설명해야 하는 시작부 흐름이다.
+
+1. `START` 에서 항상 `startup_search` 로 진입한다.
+2. `startup_search` 는 기존 후보 목록이 없으면 웹 검색 결과를 바탕으로 `candidate_startups` 를 생성한다.
+3. 첫 후보를 `selected_startup` 으로 선택하고 `current_index=0` 으로 설정한다.
+4. 이미 후보 목록이 있으면 새 검색 없이 다음 후보를 선택한다.
+5. 더 이상 볼 후보가 없으면 `selected_startup=None`, `search_done=True` 로 종료 상태를 만든다.
+6. `startup_router` 는 `selected_startup` 와 `search_done` 값을 보고 `company_summary` 또는 `report_writer` 로 보낸다.
+7. `company_summary` 는 `selected_startup` 을 입력으로 받아 검색 근거를 보강한 `startup_profile` 을 생성한다.
+
 ## 그래프 라우팅 규칙
 
 ### 1. `startup_search -> company_summary / report_writer`
