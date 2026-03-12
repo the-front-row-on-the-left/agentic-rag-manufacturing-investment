@@ -71,7 +71,7 @@
 - `TAVILY_API_KEY` 가 설정되어 있는가
 - `data/rag_docs/manifest.json` 이 존재하는가
 - PDF 원문이 `data/rag_docs/` 아래 존재하는가
-- `data/chroma/` 인덱스가 준비되어 있는가
+- Qdrant 서버가 실행 중인가
 
 ### 실행 중
 
