@@ -11,6 +11,12 @@ from src.graph import build_graph
 from src.utils.io import ensure_dir, to_jsonable
 from src.utils.pdf_export import export_report
 
+try:
+    from src.utils.pdf_export import export_report
+    _PDF_AVAILABLE = True
+except ImportError:
+    _PDF_AVAILABLE = False
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
