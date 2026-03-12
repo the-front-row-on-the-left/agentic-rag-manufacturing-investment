@@ -62,6 +62,7 @@ class CompanySummaryAgent(BaseAgent):
         }
 
     def _normalize_profile(
+        self,
         profile: StartupProfile,
         selected,
         results,
