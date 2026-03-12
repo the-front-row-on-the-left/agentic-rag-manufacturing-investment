@@ -36,12 +36,14 @@ class ReportWriterAgent(BaseAgent):
             "# SUMMARY\n"
             "## 제조업 AI 시장 배경\n"
             "## 대상 스타트업 개요\n"
+            "## 핵심 근거 (Evidence)\n"
             "## 기술 및 현장 적용성 분석\n"
             "## 시장성 분석\n"
             "## 경쟁사 및 대체 솔루션 비교\n"
             "## 경제성 분석\n"
             "## 종합 리스크 분석\n"
             "## 투자 판단 및 제언\n"
+            "In analysis sections, cite evidence claims and source_title/source_url from EvidenceItem when possible.\n"
         )
 
         response = self.llm.invoke(

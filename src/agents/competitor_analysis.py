@@ -43,7 +43,9 @@ class CompetitorAnalysisAgent(BaseAgent):
             f"Tech analysis:\n{model_to_pretty_json(tech_analysis)}\n\n"
             f"Market analysis:\n{model_to_pretty_json(market_analysis)}\n\n"
             f"Web evidence:\n{self.search_tool.to_context(results)}\n\n"
-            "Compare direct competitors, indirect competitors, and alternative solutions."
+            "Compare direct competitors, indirect competitors, and alternative solutions.\n"
+            "Return `evidence` as a list of EvidenceItem objects "
+            "(claim, detail, source_title, source_url, confidence)."
         )
 
         competitor_analysis: CompetitorAnalysis = self.structured_invoke(

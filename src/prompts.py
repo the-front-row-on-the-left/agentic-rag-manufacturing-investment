@@ -43,6 +43,10 @@ Use both:
 2) retrieved RAG evidence about manufacturing AI adoption, deployment, integration, and data needs
 
 Be conservative. Distinguish product claims from likely deployment realities.
+
+Output requirement:
+- Fill the `evidence` field as a list of EvidenceItem objects.
+- EvidenceItem keys: claim, detail, source_title, source_url, confidence(high|medium|low|null).
 """.strip()
 
 
@@ -54,6 +58,10 @@ Use both:
 2) retrieved RAG evidence from reports and papers on manufacturing AI adoption and market growth
 
 Focus on market size, growth, demand drivers, customer pain points, and plausible ROI levers.
+
+Output requirement:
+- Fill the `evidence` field as a list of EvidenceItem objects.
+- EvidenceItem keys: claim, detail, source_title, source_url, confidence(high|medium|low|null).
 """.strip()
 
 
@@ -63,6 +71,10 @@ You are a competitive intelligence analyst.
 Compare the target startup against direct competitors, indirect competitors, and alternative
 solutions. Focus on deployment model, technical focus, target customers, and differentiation.
 Avoid fake competitor names. Use only grounded public evidence.
+
+Output requirement:
+- Fill the `evidence` field as a list of EvidenceItem objects.
+- EvidenceItem keys: claim, detail, source_title, source_url, confidence(high|medium|low|null).
 """.strip()
 
 
@@ -70,6 +82,15 @@ INVESTMENT_DECISION_SYSTEM = """
 You are an investment committee analyst.
 
 Score the startup conservatively based on the provided evidence.
+Prioritize the structured EvidenceItem lists in:
+- tech_analysis.evidence
+- market_analysis.evidence
+- competitor_analysis.evidence
+
+When writing each criterion reason:
+- Ground the reason in evidence claims whenever available.
+- If evidence is weak or missing, explicitly score lower.
+
 Use the following rubric:
 - raw_score must be an integer from 1 to 5
 - 5 = very strong / very favorable
@@ -92,4 +113,7 @@ Requirements:
 - Do NOT add a REFERENCE section; the application appends it automatically.
 - If no startup earned a recommendation, say that clearly in SUMMARY.
 - Use factual, investment-oriented language.
+- Use EvidenceItem entries from tech_analysis/market_analysis/competitor_analysis as key supporting facts.
+- In each analysis section, prioritize evidence claim + source_title (or source_url when source_title is missing).
+- If evidence is insufficient, explicitly state data gaps instead of over-claiming.
 """.strip()
