@@ -21,11 +21,18 @@ class InvestmentDecisionAgent(BaseAgent):
             )
 
         user_prompt = (
-            f"Startup profile:\n{model_to_pretty_json(profile)}\n\n"
-            f"Tech analysis:\n{model_to_pretty_json(tech_analysis)}\n\n"
-            f"Market analysis:\n{model_to_pretty_json(market_analysis)}\n\n"
-            f"Competitor analysis:\n{model_to_pretty_json(competitor_analysis)}\n\n"
-            "Score the startup using the manufacturing VC rubric."
+            "Evaluate the startup using evidence-first scoring.\n"
+            "Use `evidence` arrays from tech/market/competitor analyses as primary inputs.\n"
+            "If evidence is insufficient for any criterion, score conservatively.\n\n"
+            "[Startup Profile]\n"
+            f"{model_to_pretty_json(profile)}\n\n"
+            "[Tech Analysis]\n"
+            f"{model_to_pretty_json(tech_analysis)}\n\n"
+            "[Market Analysis]\n"
+            f"{model_to_pretty_json(market_analysis)}\n\n"
+            "[Competitor Analysis]\n"
+            f"{model_to_pretty_json(competitor_analysis)}\n\n"
+            "For each criterion reason, reference the strongest matching evidence claims."
         )
 
         draft: InvestmentDecisionDraft = self.structured_invoke(

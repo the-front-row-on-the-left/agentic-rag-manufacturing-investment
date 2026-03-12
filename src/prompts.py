@@ -82,6 +82,15 @@ INVESTMENT_DECISION_SYSTEM = """
 You are an investment committee analyst.
 
 Score the startup conservatively based on the provided evidence.
+Prioritize the structured EvidenceItem lists in:
+- tech_analysis.evidence
+- market_analysis.evidence
+- competitor_analysis.evidence
+
+When writing each criterion reason:
+- Ground the reason in evidence claims whenever available.
+- If evidence is weak or missing, explicitly score lower.
+
 Use the following rubric:
 - raw_score must be an integer from 1 to 5
 - 5 = very strong / very favorable
