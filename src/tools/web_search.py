@@ -4,9 +4,12 @@ from dataclasses import dataclass
 from typing import Iterable
 
 from tavily import TavilyClient
+from tavily.errors import BadRequestError
 
 from src.utils.references import dedupe_keep_order, format_web_reference
 from src.utils.text import clean_whitespace, shorten
+
+MAX_TAVILY_QUERY_LENGTH = 400
 
 
 @dataclass(slots=True)
@@ -43,6 +46,16 @@ class TavilySearchTool:
     def __init__(self, api_key: str) -> None:
         self.client = TavilyClient(api_key=api_key)
 
+    @staticmethod
+    def _normalize_query(query: str, limit: int = MAX_TAVILY_QUERY_LENGTH) -> str:
+        # Tavily rejects long queries; normalize and cap length before request.
+        normalized = clean_whitespace(query or "")
+        if not normalized:
+            return ""
+        if len(normalized) <= limit:
+            return normalized
+        return normalized[:limit].rstrip()
+
     def search(
         self,
         query: str,
@@ -53,22 +66,45 @@ class TavilySearchTool:
         include_domains: list[str] | None = None,
         time_range: str | None = None,
     ) -> list[SearchResult]:
-        response = self.client.search(
-            query=query,
-            search_depth="advanced",
-            topic=topic,
-            max_results=max_results,
-            include_raw_content="text",
-            chunks_per_source=3,
-            exact_match=exact_match,
-            include_domains=include_domains or [],
-            time_range=time_range,
-        )
+        normalized_query = self._normalize_query(query)
+        if not normalized_query:
+            return []
+
+        try:
+            response = self.client.search(
+                query=normalized_query,
+                search_depth="advanced",
+                topic=topic,
+                max_results=max_results,
+                include_raw_content="text",
+                chunks_per_source=3,
+                exact_match=exact_match,
+                include_domains=include_domains or [],
+                time_range=time_range,
+            )
+        except BadRequestError as exc:
+            # Safety retry if provider-side length validation differs from local check.
+            if "query is too long" not in str(exc).lower():
+                raise
+            fallback_query = self._normalize_query(normalized_query, limit=300)
+            if not fallback_query:
+                return []
+            response = self.client.search(
+                query=fallback_query,
+                search_depth="advanced",
+                topic=topic,
+                max_results=max_results,
+                include_raw_content="text",
+                chunks_per_source=3,
+                exact_match=exact_match,
+                include_domains=include_domains or [],
+                time_range=time_range,
+            )
         results: list[SearchResult] = []
         for item in response.get("results", []):
             results.append(
                 SearchResult(
-                    query=query,
+                    query=normalized_query,
                     title=item.get("title", ""),
                     url=item.get("url", ""),
                     content=item.get("content", ""),
@@ -94,10 +130,11 @@ class TavilySearchTool:
         merged: list[SearchResult] = []
 
         for query in queries:
-            if not query or not query.strip():
+            normalized_query = self._normalize_query(query)
+            if not normalized_query:
                 continue
             for result in self.search(
-                query.strip(),
+                normalized_query,
                 topic=topic,
                 max_results=max_results,
                 exact_match=exact_match,
