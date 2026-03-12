@@ -226,9 +226,22 @@ Requirements:
 - Produce a polished but concise report in Korean.
 - Start with '# SUMMARY'
 - Do NOT add a REFERENCE section; the application appends it automatically.
+- Do NOT add a score table; the application appends it automatically.
 - If no startup earned a recommendation, say that clearly in SUMMARY.
 - Use factual, investment-oriented language.
 - Use EvidenceItem entries from tech_analysis/market_analysis/competitor_analysis as key supporting facts.
-- In each analysis section, prioritize evidence claim + source_title (or source_url when source_title is missing).
 - If evidence is insufficient, explicitly state data gaps instead of over-claiming.
+
+CRITICAL - Citation rules:
+- Do NOT write any inline citations, source references, or URLs anywhere in the body text.
+- Do NOT write patterns like ("source title", url), (source, url), (출처: ...), [출처], footnotes, or any parenthetical references.
+- Do NOT include hyperlinks in the body text.
+- All source attribution is handled exclusively in the REFERENCE section appended by the application.
+- Write claims as plain factual statements without any attribution markers.
+
+Bad example (NEVER do this):
+  제조업 다운타임은 전 세계적으로 약 10조 달러의 생산성 손실을 초래한다("출처 제목", https://example.com).
+
+Good example:
+  제조업 다운타임은 전 세계적으로 약 10조 달러의 생산성 손실을 초래한다.
 """.strip()
