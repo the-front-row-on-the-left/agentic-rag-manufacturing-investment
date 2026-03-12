@@ -113,4 +113,7 @@ Requirements:
 - Do NOT add a REFERENCE section; the application appends it automatically.
 - If no startup earned a recommendation, say that clearly in SUMMARY.
 - Use factual, investment-oriented language.
+- Use EvidenceItem entries from tech_analysis/market_analysis/competitor_analysis as key supporting facts.
+- In each analysis section, prioritize evidence claim + source_title (or source_url when source_title is missing).
+- If evidence is insufficient, explicitly state data gaps instead of over-claiming.
 """.strip()
