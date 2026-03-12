@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from urllib.parse import urlparse
+
 from src.agents.base import BaseAgent
 from src.prompts import STARTUP_SEARCH_SYSTEM
 from src.schemas import StartupCandidate, StartupSearchResponse
@@ -8,6 +10,28 @@ from src.tools.web_search import TavilySearchTool
 
 
 class StartupSearchAgent(BaseAgent):
+    MIN_RELEVANCE_TERMS = {
+        "manufacturing",
+        "industrial",
+        "factory",
+        "production",
+        "automation",
+        "robot",
+        "robotic",
+        "quality",
+        "inspection",
+        "predictive",
+        "maintenance",
+        "oee",
+        "supply chain",
+        "plant",
+    }
+    EXCLUDED_DOMAINS = {
+        "shop.baltimoreravens.com",
+        "ravenlunatics.com",
+        "theraveneffect.com",
+    }
+
     def __init__(self, llm, settings, search_tool: TavilySearchTool) -> None:
         super().__init__(llm=llm, settings=settings)
         self.search_tool = search_tool
@@ -56,6 +80,8 @@ class StartupSearchAgent(BaseAgent):
         for idx, candidate in enumerate(response.candidates, start=1):
             normalized_name = candidate.name.strip().lower()
             if not normalized_name or normalized_name in seen_names:
+                continue
+            if not self._is_candidate_eligible(candidate):
                 continue
             seen_names.add(normalized_name)
             candidate.startup_id = f"s{len(deduped) + 1}"
@@ -117,3 +143,29 @@ class StartupSearchAgent(BaseAgent):
             "search_done": True,
             **self._reset_current_candidate_state(),
         }
+
+    def _is_candidate_eligible(self, candidate: StartupCandidate) -> bool:
+        description = (candidate.short_description or "").strip().lower()
+        if len(description) < 25:
+            return False
+        if not any(term in description for term in self.MIN_RELEVANCE_TERMS):
+            return False
+
+        source_urls = [url for url in candidate.source_urls if url]
+        if not source_urls and not candidate.website:
+            return False
+
+        allowed_urls = [
+            url
+            for url in source_urls
+            if self._domain_from_url(url) not in self.EXCLUDED_DOMAINS
+        ]
+        if source_urls and not allowed_urls:
+            return False
+
+        candidate.source_urls = allowed_urls
+        return True
+
+    @staticmethod
+    def _domain_from_url(url: str) -> str:
+        return urlparse(url).netloc.lower().strip()
