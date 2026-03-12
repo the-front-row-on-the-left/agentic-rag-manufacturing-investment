@@ -57,6 +57,15 @@ startup_search
 6. `startup_router` 는 `selected_startup` 와 `search_done` 값을 보고 `company_summary` 또는 `report_writer` 로 보낸다.
 7. `company_summary` 는 `selected_startup` 을 입력으로 받아 검색 근거를 보강한 `startup_profile` 을 생성한다.
 
+### 탐색 정보와 프로필 근거 정보
+
+시작부에서는 모두 웹 검색을 사용하지만, `startup_search` 와 `company_summary` 의 정보 성격은 다르다.
+
+- `startup_search` 의 검색 결과는 후보 발굴을 위한 탐색 정보다.
+- 이 단계의 결과는 `candidate_startups`, `selected_startup` 을 만들기 위한 입력이며, 아직 최종 분석 근거로 바로 해석하지 않는다.
+- `company_summary` 의 검색 결과는 선택된 회사의 `startup_profile` 을 구체화하기 위한 프로필 근거 정보다.
+- 따라서 `startup_profile.source_urls` 는 탐색 중 본 모든 URL이 아니라, 실제 프로필 생성에 기여한 출처 중심으로 유지한다.
+
 ## 그래프 라우팅 규칙
 
 ### 1. `startup_search -> company_summary / report_writer`
