@@ -210,6 +210,12 @@ Output rules:
 - raw_score must be an integer from 1 to 5
 - Keep reasons short and evidence-based
 - Do not calculate weighted_score or total_score; application code will compute them
+
+pros/cons rules:
+- pros: list exactly 3 items. Each must be a concrete, evidence-backed strength.
+- cons: list exactly 3 items. Each must be a specific, evidence-backed risk or weakness.
+- Do not repeat the same point in both pros and cons.
+- Use concise phrases, not full sentences.
 """.strip()
 
 
