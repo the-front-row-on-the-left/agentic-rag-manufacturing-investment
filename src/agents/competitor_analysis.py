@@ -25,10 +25,10 @@ class CompetitorAnalysisAgent(BaseAgent):
             )
 
         queries = [
-            f'"{profile.name}" competitors',
+            f'"{profile.name}" competitors manufacturing',
             f'{profile.core_product} manufacturing AI competitors',
-            f'{profile.core_product} industrial inspection AI companies',
-            "predictive maintenance AI startup competitors manufacturing",
+            f'{profile.core_product} predictive maintenance competitors',
+            f'manufacturing AI startup competitors {profile.target_industry[0] if profile.target_industry else "industrial"}',
         ]
 
         results = self.search_tool.batch_search(
