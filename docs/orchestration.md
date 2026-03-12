@@ -21,6 +21,14 @@
 - 현재 평가 대상(`selected_startup`)
 - 기업 프로필 JSON(`startup_profile`)
 
+### 1번 보완 원칙
+
+- 검색 범위를 과도하게 줄이지 않고, 제조업 AI 스타트업 후보를 넓게 수집한다.
+- 다만 `candidate_startups` 에 등록되는 후보는 최소한 회사 실체, 제조업/산업 AI 관련성, 공개 근거를 갖춰야 한다.
+- `selected_startup` 은 최종 추천 기업이 아니라 현재 또는 마지막으로 평가한 후보를 의미한다.
+- 최종 추천/보류 결과는 `recommended_startups`, `held_startups`, `evaluation_history` 로 해석한다.
+- 탐색을 위해 수집한 정보와 실제 프로필 생성에 사용한 정보는 같은 성격으로 취급하지 않는다.
+
 ## 전체 그래프 흐름
 
 기본 흐름은 아래와 같다.
