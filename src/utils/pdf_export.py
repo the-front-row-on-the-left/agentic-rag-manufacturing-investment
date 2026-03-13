@@ -20,14 +20,30 @@ import matplotlib.font_manager as _fm
 import matplotlib.pyplot as plt
 from weasyprint import CSS as _CSS, HTML as _HTML
 
-# ── 한글 폰트 등록 ────────────────────────────────────────────────────
-_NANUM_PATH = "/usr/share/fonts/truetype/nanum/NanumGothic.ttf"
-_NANUM_BOLD_PATH = "/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf"
-for _fp in (_NANUM_PATH, _NANUM_BOLD_PATH):
+# ── 한글 폰트 등록 (Linux: NanumGothic / macOS: Apple SD Gothic Neo) ──
+_FONT_CANDIDATES = [
+    # Linux (Ubuntu/Debian)
+    "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",
+    "/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf",
+    # macOS
+    "/System/Library/Fonts/AppleSDGothicNeo.ttc",
+    "/Library/Fonts/AppleGothic.ttf",
+]
+for _fp in _FONT_CANDIDATES:
     if Path(_fp).exists():
-        _fm.fontManager.addfont(_fp)
+        try:
+            _fm.fontManager.addfont(_fp)
+        except Exception:
+            pass
 
-_KR_FONT = "NanumGothic"
+def _resolve_kr_font() -> str:
+    """시스템에서 사용 가능한 한글 폰트명 반환"""
+    for name in ("Nanum Gothic", "NanumGothic", "Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic"):
+        if any(f.name == name for f in _fm.fontManager.ttflist):
+            return name
+    return "DejaVu Sans"  # fallback (한글 깨짐은 감수)
+
+_KR_FONT = _resolve_kr_font()
 
 # ── 평가 항목 최대 가중점수 매핑 ────────────────────────────────────────
 _MAX_WEIGHTED: dict[str, float] = {
