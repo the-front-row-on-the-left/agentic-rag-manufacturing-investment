@@ -37,7 +37,7 @@
 
 본 프로젝트는 LangGraph 상에서 여러 에이전트가 역할을 나누어 실행되는 구조입니다.
 
-<img width="814" height="1112" alt="startup_agent_pipeline (1)" src="https://github.com/user-attachments/assets/033eca2e-c4ee-4e95-a93c-4bfd14770b82" />
+<img alt="startup_agent_architecture" src="./assets/architecture.png" />
 
 
 ### Workflow Summary
@@ -58,7 +58,7 @@
 
 본 프로젝트의 RAG는 제조업 AI 스타트업 자체 정보를 직접 저장하는 용도보다, 제조업 현장 적용성, 시장 맥락, 도입 리스크를 보강하는 **도메인 지식 검색 레이어**로 사용됩니다.
 
-<img width="1321" height="642" alt="startup_agent_pipeline drawio" src="https://github.com/user-attachments/assets/a47fa177-65a5-4be1-87a5-6594fd4e01b7" />
+<img alt="startup_agent_pipeline" src="./assets/rag_pipeline.png" />
 
 ### Pipeline Flow
 1. 제조업 관련 PDF 문서를 `data/rag_docs/`에 저장합니다.  
