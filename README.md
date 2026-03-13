@@ -4,9 +4,8 @@
 
 > 단순 기업 소개가 아니라, 실제 투자 검토 관점에서 후보를 스크리닝하고 우선 검토 대상을 도출하는 것을 목표로 합니다.
 
----
 
-# Overview
+## Overview
 
 제조업 AI 스타트업은 기술 설명만으로 투자 가치를 판단하기 어렵습니다. 같은 AI 기술이라도 제조 현장에서는 데이터 확보 가능성, 설비 연동 난이도, 배포 방식, ROI, 산업별 적용성에 따라 사업성이 크게 달라집니다.
 
@@ -20,9 +19,8 @@
 | 출력 | 투자 보고서 (`.md`, `.html`, `.pdf`) 및 실행 상태 (`.json`) |
 | 핵심 판단 요소 | 기술 경쟁력, 시장성, 경쟁 구도, 현장 적용성, 리스크 |
 
----
 
-# Key Features
+## Key Features
 
 - 웹 검색 기반 스타트업 후보 발굴
 - 기업 프로필 자동 요약
@@ -34,17 +32,15 @@
 - Markdown / HTML / PDF 보고서 생성
 - 참고 출처 자동 정리
 
----
 
-# Architecture
+## Architecture
 
 본 프로젝트는 LangGraph 상에서 여러 에이전트가 역할을 나누어 실행되는 구조입니다.
 
 <img width="814" height="1112" alt="startup_agent_pipeline (1)" src="https://github.com/user-attachments/assets/033eca2e-c4ee-4e95-a93c-4bfd14770b82" />
 
 
-
-## Workflow Summary
+### Workflow Summary
 
 1. `StartupSearchAgent`가 입력 키워드를 바탕으로 제조업 AI 스타트업 후보 목록을 수집합니다.  
 2. 시스템은 현재 평가할 후보를 하나씩 선택하고 `CompanySummaryAgent`가 기업 프로필을 생성합니다.  
@@ -58,13 +54,13 @@
 
 ---
 
-# RAG Pipeline
+## RAG Pipeline
 
 본 프로젝트의 RAG는 제조업 AI 스타트업 자체 정보를 직접 저장하는 용도보다, 제조업 현장 적용성, 시장 맥락, 도입 리스크를 보강하는 **도메인 지식 검색 레이어**로 사용됩니다.
 
 <img width="1321" height="642" alt="startup_agent_pipeline drawio" src="https://github.com/user-attachments/assets/a47fa177-65a5-4be1-87a5-6594fd4e01b7" />
 
-## Pipeline Flow
+### Pipeline Flow
 1. 제조업 관련 PDF 문서를 `data/rag_docs/`에 저장합니다.  
 2. 문서 메타데이터를 `manifest.json`으로 관리합니다.  
 3. 문서를 청크 단위로 분할하고 임베딩을 생성합니다.  
@@ -75,7 +71,7 @@
 
 ---
 
-# RAG vs Web Search
+## RAG vs Web Search
 
 | 구분 | 역할 |
 |-----|-----|
@@ -84,7 +80,7 @@
 
 ---
 
-# RAG Data Sources
+## RAG Data Sources
 
 | Document ID | 문서 유형 | 내용 | 활용 목적 | 문서명 | 발행처 |
 |--------------|------------|------|-----------|-------|-------|
@@ -93,9 +89,8 @@
 | DOC 3 | 제조업 디지털 전환 보고서 | AI, 데이터, 경쟁 구조, 생태계와 진입장벽, 서비스 전환 비용 등 분석 | 경쟁 환경 및 시장 진입장벽 분석 | Artificial intelligence, data and competition | OECD |
 | DOC 4 | 산업 AI 시장 리포트 | 글로벌 제조 AI 시장 규모 및 투자 트렌드 | 시장성 평가 | AI in Manufacturing: Market Analysis and Opportunities / THE FUTURE OF INDUSTRIAL AI IN MANUFACTURING / Unlocking Value from Artificial Intelligence in Manufacturing | Abdelaal Mohamed / Manufacturing Leadership Council / World Economic Forum |
 
----
 
-# Agent Roles
+## Agent Roles
 
 | Agent | 역할 | 반영되는 평가 항목 |
 |------|------|----------------|
@@ -107,9 +102,8 @@
 | InvestmentDecisionAgent | 점수 계산 및 최종 투자 판단 생성 | 전체 점수 계산 및 최종 투자 판단 |
 | ReportWriterAgent | 최종 투자 검토 보고서 작성 | 투자 평가 결과 기반 보고서 작성 |
 
----
 
-# Decision Framework
+## Decision Framework
 
 본 시스템은 제조업 AI 스타트업을 아래 **9개 기준**으로 평가합니다. 모든 평가는 제공된 evidence를 기반으로 수행되며, 정보가 부족한 경우에는 추측하지 않고 보수적으로 점수화합니다.
 
@@ -125,9 +119,8 @@
 | Team Capability | 5% | 창업자 및 핵심 팀이 해당 산업과 기술에 대한 전문성을 갖추었는가 |
 | Risk Assessment | 10% | 기술, 시장, 운영 측면에서 주요 리스크가 존재하는가 |
 
----
 
-# Scoring Principles
+## Scoring Principles
 
 - 각 항목은 **1~5점 raw score**로 평가합니다.
 - 가중 점수와 총점은 애플리케이션 코드에서 계산합니다.
@@ -135,9 +128,8 @@
 - 정보가 부족할수록 점수는 보수적으로 부여됩니다.
 - 근거 없는 낙관적 판단은 지양합니다.
 
----
 
-# Final Decision Types
+## Final Decision Types
 
 | Decision | 의미 | 총점 |
 |----------|------|------|
@@ -145,9 +137,8 @@
 | conditional_review | 잠재력은 있으나 데이터, 통합, 고객 검증 등 추가 확인이 필요 | 65 ~ 79점 |
 | hold | 공개 정보 기준 근거가 부족하거나 경쟁 우위와 시장성이 약함 | 64점 이하 |
 
----
 
-# Tech Stack
+## Tech Stack
 
 | Category | Details |
 |----------|---------|
@@ -161,17 +152,14 @@
 | Report Export | Markdown, WeasyPrint, matplotlib, numpy |
 | Package Manager | uv |
 
----
-
-# 임베딩 모델
+### 임베딩 모델
 
 | 모델 | 주요 스펙 | 장점 | 단점 |
 |------|-----------|------|------|
 | BAAI / bge-m3 | 1024차원 임베딩 / 최대 8192 토큰 / 100개 이상 언어 지원 | 한국어·영어 다국어 성능 우수 / 긴 문서 처리 가능 / hybrid 검색 확장 가능 | 모델 크기가 커 메모리 사용량이 높음 / 임베딩 속도가 느림 |
 
----
 
-# Project Structure
+## Project Structure
 
 ```text
 .
@@ -214,9 +202,7 @@
 └── outputs/
 ```
 
----
-
-# Directory Guide
+## Directory Guide
 
 - `data/rag_docs/` : 제조업 관련 PDF 문서와 메타데이터를 저장하는 RAG 코퍼스  
 - `docs/` : 오케스트레이션, 리포트 포맷, 데모 시나리오 등 상세 문서  
@@ -225,11 +211,9 @@
 - `src/tools/` : 외부 웹 검색 도구  
 - `outputs/` : 최종 보고서와 상태 파일 저장 경로  
 
----
+## Setup
 
-# Setup
-
-## Requirements
+### Requirements
 
 - Python 3.11
 - uv
@@ -237,9 +221,8 @@
 - OpenAI API Key
 - Tavily API Key
 
----
 
-## 1. Install Dependencies
+### 1. Install Dependencies
 
 ```bash
 uv python install 3.11
@@ -249,9 +232,7 @@ cp .env.example .env
 docker compose up -d qdrant
 ```
 
----
-
-## 2. Configure Environment Variables
+### 2. Configure Environment Variables
 
 `.env` 파일에 아래 값을 설정합니다.
 
@@ -275,9 +256,7 @@ QDRANT_API_KEY=
 QDRANT_COLLECTION_NAME=manufacturing_startup_eval
 ```
 
----
-
-## 3. Prepare RAG Documents
+### 3. Prepare RAG Documents
 
 - PDF files: `data/rag_docs/*.pdf`
 - Metadata: `data/rag_docs/manifest.json`
@@ -288,9 +267,7 @@ QDRANT_COLLECTION_NAME=manufacturing_startup_eval
 uv run python build_index.py
 ```
 
----
-
-## 4. Run the Application
+### 4. Run the Application
 
 ```bash
 uv run python app.py --keyword "manufacturing AI startup" --max-candidates 5
@@ -306,9 +283,7 @@ uv run python app.py --keyword "manufacturing AI inspection startup" --max-candi
 uv run python app.py --keyword "industrial predictive maintenance AI startup" --max-candidates 5
 ```
 
----
-
-# Outputs
+## Outputs
 
 | 파일 | 설명 | 산출물|
 |-----|-----|-----|
@@ -317,18 +292,16 @@ uv run python app.py --keyword "industrial predictive maintenance AI startup" --
 | final_report_*.pdf | 발표 및 공유용 문서 | [docs/outputs/final_report_20260313_104944.pdf](docs/outputs/final_report_20260313_104944.pdf) |
 | final_state_*.json | 그래프 실행 상태 및 누적 평가 결과 | [docs/outputs/final_state_20260313_104944.json](docs/outputs/final_state_20260313_104944.json) |
 
----
 
-# Limitations
+## Limitations
 
 - 공개 웹 정보의 품질에 따라 기업 프로필 정확도가 달라질 수 있습니다.
 - RAG 코퍼스가 제조업 일반 문서 중심일 경우 특정 스타트업 직접 정보는 제한적일 수 있습니다.
 - 팀 역량, 재무 정보, 고객 계약 상태 등 일부 핵심 투자 요소는 공개 정보만으로 충분히 평가하기 어렵습니다.
 - 본 시스템은 투자 보조 도구이며 실제 투자 의사결정을 대체하지 않습니다.
 
----
 
-# Future Work
+## Future Work
 
 - 팀 및 재무 분석 에이전트 추가
 - 산업 세부 분야별 평가 기준 고도화
@@ -336,9 +309,7 @@ uv run python app.py --keyword "industrial predictive maintenance AI startup" --
 - UI / 대시보드 구축
 - 다중 기업 비교 기능 확장
 
----
-
-# Contributors
+## Contributors
 
 | 이름 | 담당 역할 |
 |-----|-----------|
