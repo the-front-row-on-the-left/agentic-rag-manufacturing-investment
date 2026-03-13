@@ -195,9 +195,13 @@ def _extract_key_shortfall(decision: dict) -> str:
 
 def _sanitize_reason(reason: str) -> str:
     cleaned = str(reason).strip()
+    cleaned = re.sub(r"\[([^\]]+)\]\((https?://[^)]+)\)", r"\1", cleaned)
+    cleaned = re.sub(r"https?://\S+|www\.\S+", "", cleaned)
     cleaned = re.sub(r"\([^)]*(https?://|www\.)[^)]*\)", "", cleaned)
     cleaned = re.sub(
         r"\(([^)]*출처[^)]*|[^)]*source[^)]*)\)", "", cleaned, flags=re.IGNORECASE
     )
+    cleaned = re.sub(r"[\r\n]+", " ", cleaned)
+    cleaned = cleaned.replace("|", "\\|")
     cleaned = re.sub(r"\s{2,}", " ", cleaned).strip()
     return cleaned
