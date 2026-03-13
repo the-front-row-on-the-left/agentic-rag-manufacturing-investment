@@ -33,7 +33,7 @@ LABELS = {
 
 
 def _weighted_score(raw_score: int, weight: int) -> float:
-    return round((raw_score / 5.0) * weight, 2)
+    return round((int(raw_score) / 5.0) * weight, 2)
 
 
 def finalize_investment_decision(draft: InvestmentDecisionDraft) -> InvestmentDecision:
@@ -42,9 +42,10 @@ def finalize_investment_decision(draft: InvestmentDecisionDraft) -> InvestmentDe
 
     for field_name, weight in WEIGHTS.items():
         criterion = getattr(draft, field_name)
-        weighted = _weighted_score(criterion.raw_score, weight)
+        clamped_raw_score = max(1, min(5, int(criterion.raw_score)))
+        weighted = _weighted_score(clamped_raw_score, weight)
         score_breakdown[field_name] = CriterionAssessment(
-            raw_score=criterion.raw_score,
+            raw_score=clamped_raw_score,
             weighted_score=weighted,
             reason=criterion.reason,
         )

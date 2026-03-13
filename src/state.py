@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from operator import add
-from typing import Any
-from typing import Annotated
+from typing import Annotated, Any
 
 from typing_extensions import TypedDict
 
@@ -47,9 +46,9 @@ class GraphState(TypedDict, total=False):
     investment_decision: InvestmentDecision | None
 
     # 누적 평가 결과
-    recommended_startups: list[dict[str, Any]]
-    held_startups: list[dict[str, Any]]
-    evaluation_history: list[dict[str, Any]]
+    recommended_startups: Annotated[list[dict[str, Any]], add]
+    held_startups: Annotated[list[dict[str, Any]], add]
+    evaluation_history: Annotated[list[dict[str, Any]], add]
 
     # 라우팅 상태
     search_done: bool

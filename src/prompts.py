@@ -99,39 +99,39 @@ If information is insufficient, do not assume. Score conservatively and mention 
 Rubric:
 1 unclear/minor/non-manufacturing problem
 2 limited operational impact
-3 relevant but not core pain point
-4 significant operational impact
-5 critical and widely recognized pain point
+3 relevant manufacturing pain point, but only startup claims — no external traction evidence
+4 significant pain point WITH initial verified traction (named pilots, LOIs, or paying customers)
+5 critical pain point AND deployed customers with specific, quantified operational impact metrics
 
 2. Market Opportunity (Weight: 15%)
 - Evaluate market size, growth potential, and customer demand.
-- Ask: Is the market large/growing and are customers willing to pay?
+- Ask: Does the startup itself show evidence of capturing market demand?
 Rubric:
 1 small/unclear market
 2 weak growth or demand
-3 moderate size/demand
-4 growing market with strong demand
-5 large, rapidly growing market with strong demand
+3 large/growing market exists (TAM/CAGR), but startup shows no commercial traction yet
+4 large market AND startup shows initial commercial traction (named customers or early revenue)
+5 large market AND startup shows strong commercial traction (ARR/revenue, enterprise contracts, clear pipeline)
 
 3. Technology Differentiation (Weight: 15%)
 - Evaluate uniqueness and defensibility.
-- Ask: Is the solution hard to replicate (data, patents, specialized models)?
+- Ask: Is the differentiation backed by third-party evidence, not just the startup's own claims?
 Rubric:
 1 commodity, no differentiation
-2 minor, easy to replicate
-3 some differentiation, limited defensibility
-4 clear technical advantage
-5 strong defensibility and unique assets
+2 minor differentiation, easily replicable
+3 some differentiation claimed but only from startup marketing or website — no external validation
+4 clear technical advantage with third-party evidence (benchmark, expert review, or verifiable results)
+5 strong defensibility: IP, proprietary data assets, or independently verified superior performance
 
 4. Deployability (Weight: 15%)
 - Evaluate practical deployability in factory environments.
-- Ask: Can it run in real operations (on-prem/edge where needed) and be maintained?
+- Ask: Is there verified, third-party evidence of real manufacturing deployment, or only claims?
 Rubric:
-1 not realistically deployable
-2 deployment extremely difficult
-3 limited pilot feasibility
-4 deployable with manageable effort
-5 proven deployability in real manufacturing
+1 not realistically deployable in manufacturing
+2 deployment extremely difficult or very limited
+3 technically deployable; startup claims deployment readiness but no verified customer case studies
+4 deployable with manageable effort AND 1-2 verified customer cases with specific outcome metrics
+5 proven at-scale deployability across multiple manufacturing sites with quantified, independently verified outcomes
 
 5. Data Availability (Weight: 5%)
 - Evaluate whether required data can be collected and maintained.
@@ -186,6 +186,14 @@ Final instructions for each criterion:
 Do not give high scores without clear supporting evidence.
 Avoid optimistic assumptions.
 Base all scores strictly on provided analysis.
+
+CRITICAL — Score calibration rule:
+- 3 is the DEFAULT baseline for a startup that looks potentially viable but concrete proof is limited.
+- 4 requires citing at least one HIGH-confidence evidence item directly supporting the criterion.
+- 5 requires TWO or more HIGH-confidence evidence items AND at least one with a measurable, verified outcome.
+- Industry analyst forecasts (TAM, CAGR, market reports) do NOT by themselves justify scores above 3 for market_opportunity.
+- Startup self-descriptions, press releases, or website claims do NOT justify 4+ for technology, deployability, or scalability.
+- When in doubt, round DOWN, not up.
 """.strip()
 
 
@@ -202,6 +210,21 @@ Prioritize the structured EvidenceItem lists in:
 When writing each criterion reason:
 - Ground the reason in evidence claims whenever available.
 - If evidence is weak or missing, explicitly score lower.
+
+Conservative cap rules (must apply):
+- If real customer deployment/traction evidence is missing or ambiguous, cap `deployability` and `scalability` at 3.
+- If required data availability/integration evidence is missing or ambiguous, cap `data_availability` and `integration` at 3.
+- `problem_fit` ≤ 4: Score 5 only if the startup has named, deployed customers with quantified impact (e.g., "30% downtime reduction at Company X").
+- `market_opportunity` ≤ 4: Score 5 only if the startup shows actual commercial traction (revenue, ARR, named paying customers, or signed enterprise contracts).
+- `technology` ≤ 3 if the only technical evidence is from the startup's own website, marketing, or founder interviews — require independent validation for 4+.
+- `team_capability` ≤ 3 unless there is explicit, verifiable evidence of both manufacturing-domain AND AI/ML expertise in the founding or core leadership team.
+
+Scoring discipline (strictly enforce):
+- Treat 3 as the baseline score. A startup must earn 4 or 5 — it is not the default.
+- Score 4 ONLY when you can explicitly point to a HIGH-confidence evidence item that directly supports that criterion.
+- Score 5 ONLY when two or more HIGH-confidence items exist AND at least one shows measurable outcomes.
+- If most supporting evidence has confidence "medium" or "low", cap the criterion at 3.
+- If you find yourself giving 4+ to many criteria, stop and recalibrate — a typical early-stage startup should score mostly 2-3, with 4 only for genuinely exceptional, evidence-backed strengths.
 
 Use the following rubric:
 {EVALUATION_CRITERIA}

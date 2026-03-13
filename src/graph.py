@@ -32,11 +32,9 @@ def decision_router(state: GraphState) -> str:
     decision = state.get("investment_decision")
     if not decision:
         return REPORT_WRITER_NODE
-    if decision.decision == "recommend":
-        return REPORT_WRITER_NODE
 
-    # A non-recommend decision means the current candidate evaluation is complete,
-    # so the graph either advances the pointer to the next candidate or exits.
+    # Once a candidate has been evaluated, the graph keeps iterating until the
+    # full candidate list is exhausted, then writes a single final report.
     candidate_startups = state.get("candidate_startups", [])
     current_index = state.get("current_index", -1)
     if current_index + 1 < len(candidate_startups):
@@ -59,7 +57,9 @@ def build_graph(settings: Settings):
     startup_search_agent = StartupSearchAgent(llm, settings, search_tool)
     company_summary_agent = CompanySummaryAgent(llm, settings, search_tool)
     tech_analysis_agent = TechAnalysisAgent(llm, settings, search_tool, rag_retriever)
-    market_analysis_agent = MarketAnalysisAgent(llm, settings, search_tool, rag_retriever)
+    market_analysis_agent = MarketAnalysisAgent(
+        llm, settings, search_tool, rag_retriever
+    )
     competitor_analysis_agent = CompetitorAnalysisAgent(llm, settings, search_tool)
     investment_decision_agent = InvestmentDecisionAgent(llm, settings)
     report_writer_agent = ReportWriterAgent(llm, settings)
