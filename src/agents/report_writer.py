@@ -42,7 +42,12 @@ class ReportWriterAgent(BaseAgent):
                 item.get("investment_decision", {}).get("total_score", 0)
             ),
         )
-        is_hold_report = not recommended_candidates
+        if recommended_candidates:
+            report_status = "recommend"
+        elif conditional_candidates:
+            report_status = "conditional_review"
+        else:
+            report_status = "hold"
 
         startup_name = best["startup_profile"].get("name", "스타트업")
 
@@ -76,7 +81,7 @@ class ReportWriterAgent(BaseAgent):
         # 점수표를 "## 투자 판단 및 제언" 섹션 바로 아래에 삽입
         DECISION_HEADER = "## 투자 판단 및 제언"
 
-        if is_hold_report:
+        if report_status == "hold":
             hold_summary = _build_hold_summary(best, evaluation_history)
             if DECISION_HEADER in body:
                 body = body.replace(
@@ -88,11 +93,12 @@ class ReportWriterAgent(BaseAgent):
                 body += "\n\n" + hold_summary
 
         # 보고서 제목 삽입
-        report_subtitle = (
-            "> 제조업 AI 스타트업 보류 검토"
-            if is_hold_report
-            else "> 제조업 AI 스타트업 투자 평가"
-        )
+        if report_status == "recommend":
+            report_subtitle = "> 제조업 AI 스타트업 투자 평가"
+        elif report_status == "conditional_review":
+            report_subtitle = "> 제조업 AI 스타트업 조건부 검토"
+        else:
+            report_subtitle = "> 제조업 AI 스타트업 보류 검토"
         title_block = f"# {startup_name} 투자 검토 보고서\n{report_subtitle}\n\n---\n\n"
 
         # 점수표 생성
