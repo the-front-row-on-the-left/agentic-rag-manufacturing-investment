@@ -191,13 +191,6 @@ body {
   color: white;
   padding: 48px 48px 36px;
 }
-.cover h1 {
-  font-size: 28pt;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: white;
-  letter-spacing: -0.5px;
-}
 .cover .subtitle { font-size: 10pt; color: #bee3f8; font-weight: 300; }
 .cover .badges { margin-top: 20px; }
 .badge {
@@ -217,9 +210,18 @@ body {
 /* ── 본문 ── */
 .content { padding: 40px 48px 48px; }
 
-h1 { display: none; }
+.content h1 { display: none; }
 blockquote { display: none; }
 hr { display: none; }
+
+.cover h1 {
+  display: block !important;
+  font-size: 28pt !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+  color: white !important;
+  letter-spacing: -0.5px;
+}
 
 h2 {
   font-size: 13pt;
@@ -386,12 +388,13 @@ def html_to_pdf(html_str: str, output_path: str | Path) -> None:
         stylesheets=[
             _CSS(
                 string=(
-                    "@page { size: A4; margin: 18mm 16mm 18mm 16mm; }"
-                    "body { background: white; }"
+                    "@page { size: A4; margin: 18mm 16mm 18mm 16mm; background: white; }"
+                    "html, body { background: white; }"
                     ".page-wrap { max-width: 100%; margin: 0; "
-                    "border-radius: 0; box-shadow: none; }"
-                    ".cover { padding: 36px 40px 28px; }"
-                    ".cover h1 { font-size: 26pt !important; }"
+                    "border-radius: 0; box-shadow: none; background: white; }"
+                    ".cover { padding: 36px 40px 28px; border-radius: 0; }"
+                    ".cover h1 { display: block !important; font-size: 30pt !important; "
+                    "font-weight: 700 !important; color: white !important; }"
                     ".content { padding: 28px 40px 36px; }"
                 )
             )
