@@ -40,7 +40,10 @@
 
 본 프로젝트는 LangGraph 상에서 여러 에이전트가 역할을 나누어 실행되는 구조입니다.
 
-![architecture](README/image.png)
+<img width="1321" height="642" alt="startup_agent_pipeline drawio" src="https://github.com/user-attachments/assets/a47fa177-65a5-4be1-87a5-6594fd4e01b7" />
+
+
+
 
 ## Workflow Summary
 
@@ -307,12 +310,12 @@ uv run python app.py --keyword "industrial predictive maintenance AI startup" --
 
 # Outputs
 
-| 파일 | 설명 |
-|-----|-----|
-| final_report_*.md | 최종 투자 검토 보고서 원본 |
-| final_report_*.html | 브라우저 확인용 렌더링 결과 |
-| final_report_*.pdf | 발표 및 공유용 문서 |
-| final_state_*.json | 그래프 실행 상태 및 누적 평가 결과 |
+| 파일 | 설명 | 산출물|
+|-----|-----|-----|
+| final_report_*.md | 최종 투자 검토 보고서 원본 ||
+| final_report_*.html | 브라우저 확인용 렌더링 결과 ||
+| final_report_*.pdf | 발표 및 공유용 문서 |[final_report_20260313_104944.pdf](https://github.com/user-attachments/files/25957801/final_report_20260313_104944.pdf)|
+| final_state_*.json | 그래프 실행 상태 및 누적 평가 결과 ||
 
 ---
 
