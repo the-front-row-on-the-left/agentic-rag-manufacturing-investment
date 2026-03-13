@@ -152,12 +152,13 @@
 | Report Export | Markdown, WeasyPrint, matplotlib, numpy |
 | Package Manager | uv |
 
-### 임베딩 모델
+<details>
+<summary><h3>임베딩 모델</h3></summary>
 
 | 모델 | 주요 스펙 | 장점 | 단점 |
 |------|-----------|------|------|
 | BAAI / bge-m3 | 1024차원 임베딩 / 최대 8192 토큰 / 100개 이상 언어 지원 | 한국어·영어 다국어 성능 우수 / 긴 문서 처리 가능 / hybrid 검색 확장 가능 | 모델 크기가 커 메모리 사용량이 높음 / 임베딩 속도가 느림 |
-
+</details>
 
 ## Project Structure
 
@@ -211,7 +212,8 @@
 - `src/tools/` : 외부 웹 검색 도구  
 - `outputs/` : 최종 보고서와 상태 파일 저장 경로  
 
-## Setup
+<details>
+<summary><h2>Setup</h2></summary>
 
 ### Requirements
 
@@ -282,6 +284,7 @@ uv run python app.py --keyword "manufacturing AI inspection startup" --max-candi
 ```bash
 uv run python app.py --keyword "industrial predictive maintenance AI startup" --max-candidates 5
 ```
+</details>
 
 ## Outputs
 
@@ -308,6 +311,27 @@ uv run python app.py --keyword "industrial predictive maintenance AI startup" --
 - reference grounding 및 citation 체계 개선
 - UI / 대시보드 구축
 - 다중 기업 비교 기능 확장
+
+
+## Investment Report Highlights
+
+- 여러 제조업 AI 스타트업 후보를 끝까지 비교 평가한 뒤, 최종적으로 **추천 우선 대상 1개** 또는 **대표 보류 후보**를 선정하도록 설계했습니다.
+- 점수는 **문제 적합성, 시장성, 기술, 현장 적용성, 데이터, 통합, 확장성, 팀 역량, 리스크**의 9개 기준을 가중 합산해 계산합니다.
+- 정보가 부족한 항목은 낙관적으로 추정하지 않고 **보수적으로 채점**하며, 보고서에 항목별 근거와 한계를 함께 제시합니다.
+- 추천 기업이 없더라도 보류 사유와 핵심 취약점을 정리해 **설명 가능한 투자 검토 보고서**를 생성합니다.
+- 최종 보고서는 서술형 투자 메모와 별도 레퍼런스 섹션으로 구성해 **가독성과 검증 가능성**을 함께 확보했습니다.
+
+## Lessons Learned
+
+### 프롬프트 제약은 구체적인 나쁜 예시와 함께 써야 효과가 있다 (권세빈)
+"인라인 출처를 쓰지 마세요"만으로는 부족합니다. (What Does Allie Do? | PromptLoop) 같은 구체적인 패턴을 프롬프트에 명시해야 LLM이 실제로 피합니다. 또한 검색 기반 에이전트는 동일 도메인을 여러 번 참조하기 때문에 레퍼런스는 URL 기준 dedupe와 도메인당 개수 제한으로 반드시 후처리가 필요합니다. 함수 시그니처를 변경할 때는 호출부도 함께 확인해야 하며, 이는 팀 협업에서 특히 중요합니다.
+### State와 스키마 설계는 처음부터 제대로 정해야 한다 (김현문)
+초기에 evidence를 단순 string으로 수집했을 때의 한계를 보완하기 위해 EvidenceItem 클래스를 추가하고 rubric 기반 채점 기준을 적용하면서 결과 품질이 향상됐습니다. 나중에 고치기 어렵기 때문에 프로젝트 초반 설계가 중요합니다. 또한 각자의 역할을 문서로 명확히 나누고 에이전트가 서로의 영역을 침범하지 않도록 프롬프트를 작성하면, 충돌 없이 생산성이 올라가는 협업 환경을 만들 수 있습니다.
+### RAG는 검색 성능보다 목적에 맞는 근거 선별 설계가 핵심이다 (박동민)
+semantic similarity만으로는 특정 문서에 편중되거나 유사 문단이 반복되는 문제가 생깁니다. 문서마다 tech, market, manufacturing 태그를 부여하고 에이전트 역할별로 다르게 가져오도록 구성하면 분석 품질이 달라집니다. RAG에서는 검색 성능보다, 분석 목적에 맞게 근거를 구분하고 선별하는 설계가 더 중요합니다.
+### 멀티에이전트 시스템에서 중요한 것은 agent 수가 아니라 상태 설계다 (이주원)
+후보 스타트업 리스트, 현재 평가 대상, 누적 평가 이력, 최종 보고서 대상 기업을 명확히 분리하지 않으면 반복 평가 구조가 쉽게 꼬입니다. 실제 투자 검토는 단일 기업 평가가 아니라 여러 후보를 선별하는 과정에 가깝기 때문에, 추천 기업이 없을 때도 다음 후보를 계속 평가하고 최종적으로 대표 보류 기업과 보류 사유 요약을 생성하는 구조가 더 현실적인 워크플로우입니다.
+
 
 ## Contributors
 
