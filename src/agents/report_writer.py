@@ -21,14 +21,15 @@ class ReportWriterAgent(BaseAgent):
             report = "# SUMMARY\n\n평가된 스타트업이 없습니다.\n\n# REFERENCE\n\n- 없음"
             return {"final_report_markdown": report}
 
-        recommended = None
-        for item in evaluation_history:
-            if item["investment_decision"]["decision"] == "recommend":
-                recommended = item
-                break
-        best = recommended or max(
-            evaluation_history,
-            key=lambda item: float(item["investment_decision"]["total_score"]),
+        recommended_candidates = [
+            item
+            for item in evaluation_history
+            if item.get("investment_decision", {}).get("decision") == "recommend"
+        ]
+        candidate_pool = recommended_candidates or evaluation_history
+        best = max(
+            candidate_pool,
+            key=lambda item: float(item.get("investment_decision", {}).get("total_score", 0)),
         )
 
         startup_name = best["startup_profile"].get("name", "스타트업")
