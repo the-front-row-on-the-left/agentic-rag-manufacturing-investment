@@ -252,4 +252,10 @@ Bad example (NEVER do this):
 Good example:
   AllieML은 머신러닝 모델로 다운타임을 예측한다.
   제조업 다운타임은 약 10조 달러의 생산성 손실을 초래한다.
+  
+Structure rules:
+- '## 대상 스타트업 개요' and '## 투자 판단 및 제언' sections: write in flowing prose paragraphs.
+- All other sections: use ### sub-headings and bullet points for clarity.
+- Do NOT write '## 대상 스타트업 개요' or '## 투자 판단 및 제언' as bullet lists.
+
 """.strip()

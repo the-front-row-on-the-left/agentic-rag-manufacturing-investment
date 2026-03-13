@@ -40,7 +40,7 @@ class ReportWriterAgent(BaseAgent):
             "# SUMMARY\n"
             "## 제조업 AI 시장 배경\n"
             "## 대상 스타트업 개요\n"
-            "## 핵심 근거 (Evidence)\n"
+            "## 핵심 근거\n"
             "## 기술 및 현장 적용성 분석\n"
             "## 시장성 분석\n"
             "## 경쟁사 및 대체 솔루션 비교\n"

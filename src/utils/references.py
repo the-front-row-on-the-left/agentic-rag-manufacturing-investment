@@ -84,22 +84,32 @@ def merge_rag_references(references: list[str]) -> list[str]:
     return merged + non_rag
 
 
-def dedupe_by_url(references: list[str]) -> list[str]:
+def dedupe_by_url(references: list[str], max_per_domain: int = 1) -> list[str]:
     """
-    URL이 동일한 레퍼런스 중복 제거.
-    URL 없는 항목(RAG 문서 등)은 전체 문자열 기준 중복 제거.
+    - URL 완전 동일 항목 제거
+    - 동일 도메인 max_per_domain 개 초과 시 제거
+    - URL 없는 항목(RAG 문서)은 전체 문자열 기준 중복 제거
     순서 유지.
     """
+    from collections import defaultdict
+    import re
+
     seen_urls: set[str] = set()
     seen_raw: set[str] = set()
+    domain_count: dict[str, int] = defaultdict(int)
     result = []
+
     for ref in references:
-        url_match = re.search(r'https?://\S+', ref)
+        url_match = re.search(r'https?://([^/\s]+)(/\S*)?', ref)
         if url_match:
             url = url_match.group(0).rstrip('.,)')
+            domain = url_match.group(1)
             if url in seen_urls:
                 continue
+            if domain_count[domain] >= max_per_domain:
+                continue
             seen_urls.add(url)
+            domain_count[domain] += 1
         else:
             if ref in seen_raw:
                 continue

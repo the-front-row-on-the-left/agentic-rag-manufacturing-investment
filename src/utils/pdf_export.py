@@ -192,10 +192,11 @@ body {
   padding: 48px 48px 36px;
 }
 .cover h1 {
-  font-size: 22pt;
+  font-size: 28pt;
   font-weight: 700;
   margin-bottom: 8px;
   color: white;
+  letter-spacing: -0.5px;
 }
 .cover .subtitle { font-size: 10pt; color: #bee3f8; font-weight: 300; }
 .cover .badges { margin-top: 20px; }
@@ -288,20 +289,20 @@ tr:last-child td { font-weight: 700; background: #ebf8ff; color: #1a365d; }
 .chart-box img { width: 100%; max-width: 320px; }
 
 /* ── 레퍼런스 섹션 ── */
-.refs-section {
-  margin-top: 40px;
-  padding: 20px 24px;
+#reference + ul, h2#reference ~ ul {
+  font-size: 8.5pt;
+  color: #4a5568;
   background: #f7fafc;
-  border-radius: 8px;
   border: 1px solid #e2e8f0;
+  border-radius: 0 0 8px 8px;
+  padding: 16px 20px;
+  margin-top: -10px;
+  list-style: none;
 }
-.refs-section h2 {
-  background: none;
-  border-left: none;
-  padding: 0 0 8px;
-  margin: 0 0 12px;
-  font-size: 11pt;
-  border-bottom: 1px solid #e2e8f0;
+#reference + ul li, h2#reference ~ ul li {
+  padding: 3px 0;
+  border-bottom: 1px solid #edf2f7;
+  word-break: break-all;
 }
 """
 
@@ -345,6 +346,9 @@ def md_to_html(md_text: str) -> str:
         f"<h2>투자 판단 및 제언</h2>{charts_html}",
     )
 
+    # REFERENCE h1 → h2로 변환 (목차에 포함되도록)
+    body = body.replace("<h1>REFERENCE</h1>", '<h2 id="reference">참고 문헌</h2>')
+
     badge_style = (
         f"background:{dec_bg};color:{dec_color};"
         f"border:1.5px solid {dec_border};"
@@ -382,10 +386,13 @@ def html_to_pdf(html_str: str, output_path: str | Path) -> None:
         stylesheets=[
             _CSS(
                 string=(
-                    "@page { size: A4; margin: 0; }"
+                    "@page { size: A4; margin: 18mm 16mm 18mm 16mm; }"
                     "body { background: white; }"
                     ".page-wrap { max-width: 100%; margin: 0; "
                     "border-radius: 0; box-shadow: none; }"
+                    ".cover { padding: 36px 40px 28px; }"
+                    ".cover h1 { font-size: 26pt !important; }"
+                    ".content { padding: 28px 40px 36px; }"
                 )
             )
         ],
