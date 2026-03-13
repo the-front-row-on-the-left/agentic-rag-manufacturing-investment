@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 from src.agents.base import BaseAgent
 from src.prompts import REPORT_WRITER_SYSTEM
 from src.scoring import LABELS
@@ -72,9 +74,19 @@ class ReportWriterAgent(BaseAgent):
 
         body = response.content.strip()
 
+        # 점수표를 "## 투자 판단 및 제언" 섹션 바로 아래에 삽입
+        DECISION_HEADER = "## 투자 판단 및 제언"
+
         if is_hold_report:
             hold_summary = _build_hold_summary(best, evaluation_history)
-            body += "\n\n" + hold_summary
+            if DECISION_HEADER in body:
+                body = body.replace(
+                    DECISION_HEADER,
+                    f"{hold_summary}\n\n{DECISION_HEADER}",
+                    1,
+                )
+            else:
+                body += "\n\n" + hold_summary
 
         # 보고서 제목 삽입
         report_subtitle = (
@@ -87,8 +99,6 @@ class ReportWriterAgent(BaseAgent):
         # 점수표 생성
         score_table = _build_score_table(best)
 
-        # 점수표를 "## 투자 판단 및 제언" 섹션 바로 아래에 삽입
-        DECISION_HEADER = "## 투자 판단 및 제언"
         if DECISION_HEADER in body:
             body = body.replace(
                 DECISION_HEADER,
@@ -126,7 +136,7 @@ def _build_score_table(best: dict) -> str:
         label = LABELS.get(field, field)
         raw = criterion.get("raw_score", "-")
         weighted = criterion.get("weighted_score", "-")
-        reason = criterion.get("reason", "")
+        reason = _sanitize_reason(criterion.get("reason", ""))
         rows.append(f"| {label} | {raw}/5 | {weighted} | {reason} |")
 
     table = (
@@ -163,10 +173,24 @@ def _extract_key_shortfall(decision: dict) -> str:
     if not score_breakdown:
         return "핵심 미달 사유를 확인할 수 없습니다."
 
-    lowest_field, lowest_item = min(
+    sorted_items = sorted(
         score_breakdown.items(),
         key=lambda pair: float(pair[1].get("weighted_score", 0)),
     )
-    label = LABELS.get(lowest_field, lowest_field)
-    reason = str(lowest_item.get("reason", "사유 정보 없음")).strip()
-    return f"{label} 미흡 - {reason}"
+    top_shortfalls = sorted_items[:2]
+
+    parts: list[str] = []
+    for field, item in top_shortfalls:
+        label = LABELS.get(field, field)
+        reason = _sanitize_reason(item.get("reason", "사유 정보 없음"))
+        parts.append(f"{label} 미흡 - {reason}")
+
+    return "; ".join(parts)
+
+
+def _sanitize_reason(reason: str) -> str:
+    cleaned = str(reason).strip()
+    cleaned = re.sub(r"\([^)]*(https?://|www\.)[^)]*\)", "", cleaned)
+    cleaned = re.sub(r"\(([^)]*출처[^)]*|[^)]*source[^)]*)\)", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\s{2,}", " ", cleaned).strip()
+    return cleaned
