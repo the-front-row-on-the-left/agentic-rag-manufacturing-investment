@@ -241,7 +241,7 @@ CRITICAL - Citation rules:
 - Do NOT write any inline citations, source references, or URLs anywhere in the body text.
 - Do NOT write patterns like ("source title", url), (source, url), (출처: ...), [출처], footnotes, or any parenthetical references.
 - Do NOT include hyperlinks in the body text.
-- Do NOT write source titles in parentheses at the end of sentences, e.g. (What Does Allie Do? | PromptLoop).  ← 이 줄 추가
+- Do NOT write source titles in parentheses at the end of sentences, e.g. (What Does Allie Do? | PromptLoop). 
 - All source attribution is handled exclusively in the REFERENCE section appended by the application.
 - Write claims as plain factual statements without any attribution markers.
 
