@@ -26,11 +26,17 @@ class ReportWriterAgent(BaseAgent):
             for item in evaluation_history
             if item.get("investment_decision", {}).get("decision") == "recommend"
         ]
-        candidate_pool = recommended_candidates or evaluation_history
+        conditional_candidates = [
+            item
+            for item in evaluation_history
+            if item.get("investment_decision", {}).get("decision") == "conditional_review"
+        ]
+        candidate_pool = recommended_candidates or conditional_candidates or evaluation_history
         best = max(
             candidate_pool,
             key=lambda item: float(item.get("investment_decision", {}).get("total_score", 0)),
         )
+        is_hold_report = not recommended_candidates
 
         startup_name = best["startup_profile"].get("name", "스타트업")
 
@@ -61,10 +67,19 @@ class ReportWriterAgent(BaseAgent):
 
         body = response.content.strip()
 
+        if is_hold_report:
+            hold_summary = _build_hold_summary(best, evaluation_history)
+            body += "\n\n" + hold_summary
+
         # 보고서 제목 삽입
+        report_subtitle = (
+            "> 제조업 AI 스타트업 보류 검토"
+            if is_hold_report
+            else "> 제조업 AI 스타트업 투자 평가"
+        )
         title_block = (
             f"# {startup_name} 투자 검토 보고서\n"
-            f"> 제조업 AI 스타트업 투자 평가\n\n"
+            f"{report_subtitle}\n\n"
             "---\n\n"
         )
 
@@ -122,3 +137,35 @@ def _build_score_table(best: dict) -> str:
     table += f"\n| **합계** | | **{total_score}** | |\n"
 
     return table
+
+
+def _build_hold_summary(best: dict, evaluation_history: list[dict]) -> str:
+    best_name = best.get("startup_profile", {}).get("name", "대표 후보")
+    best_score = best.get("investment_decision", {}).get("total_score", 0)
+
+    lines = [
+        "## 전체 후보 미달 요약",
+        f"- 이번 배치는 투자 추천 기준 미달로 보류 처리되었습니다.",
+        f"- 대표 보류 후보: {best_name} ({best_score}점)",
+    ]
+
+    for item in evaluation_history:
+        name = item.get("startup_profile", {}).get("name", "이름 미확인")
+        shortfall = _extract_key_shortfall(item.get("investment_decision", {}))
+        lines.append(f"- {name}: {shortfall}")
+
+    return "\n".join(lines)
+
+
+def _extract_key_shortfall(decision: dict) -> str:
+    score_breakdown = decision.get("score_breakdown", {})
+    if not score_breakdown:
+        return "핵심 미달 사유를 확인할 수 없습니다."
+
+    lowest_field, lowest_item = min(
+        score_breakdown.items(),
+        key=lambda pair: float(pair[1].get("weighted_score", 0)),
+    )
+    label = LABELS.get(lowest_field, lowest_field)
+    reason = str(lowest_item.get("reason", "사유 정보 없음")).strip()
+    return f"{label} 미흡 - {reason}"
