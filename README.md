@@ -109,15 +109,15 @@
 
 | Criterion | Weight | 설명 |
 |-----------|-------|------|
-| Problem Fit | 15% | 해당 스타트업이 해결하려는 문제가 실제 제조 현장의 핵심 문제(pain point)를 해결하는가 |
-| Market Opportunity | 15% | 제조업 AI 시장의 성장성과 고객 수요가 충분한가 |
-| Technology | 15% | 기술이 독창적이며 경쟁사 대비 차별성이 있는가 |
-| Deployability | 15% | 공장 환경에서 실제로 도입 및 운영 가능한 기술인가 |
-| Data Availability | 5% | AI 모델 운영에 필요한 데이터를 안정적으로 확보할 수 있는 구조인가 |
-| Integration | 10% | 기존 MES, ERP, 생산 설비 시스템 등과 연동 가능한가 |
-| Scalability | 10% | PoC 이후 여러 공장이나 생산 라인으로 확장 가능한가 |
-| Team Capability | 5% | 창업자 및 핵심 팀이 해당 산업과 기술에 대한 전문성을 갖추었는가 |
-| Risk Assessment | 10% | 기술, 시장, 운영 측면에서 주요 리스크가 존재하는가 |
+| 문제 적합성 (Problem Fit) | 15% | 해당 스타트업이 해결하려는 문제가 실제 제조 현장의 핵심 문제(pain point)를 해결하는가 |
+| 시장성 (Market Opportunity) | 15% | 제조업 AI 시장의 성장성과 고객 수요가 충분한가 |
+| 기술 경쟁력 (Technology) | 15% | 기술이 독창적이며 경쟁사 대비 차별성이 있는가 |
+| 현장 적용 가능성 (Deployability) | 15% | 공장 환경에서 실제로 도입 및 운영 가능한 기술인가 |
+| 데이터 확보 가능성 (Data Availability) | 5% | AI 모델 운영에 필요한 데이터를 안정적으로 확보할 수 있는 구조인가 |
+| 시스템 통합 가능성 (Integration) | 10% | 기존 MES, ERP, 생산 설비 시스템 등과 연동 가능한가 |
+| 확장 가능성 (Scalability) | 10% | PoC 이후 여러 공장이나 생산 라인으로 확장 가능한가 |
+| 팀 역량 (Team Capability) | 5% | 창업자 및 핵심 팀이 해당 산업과 기술에 대한 전문성을 갖추었는가 |
+| 리스크 평가 (Risk Assessment) | 10% | 기술, 시장, 운영 측면에서 주요 리스크가 존재하는가 |
 
 
 ## Scoring Principles
@@ -323,21 +323,17 @@ uv run python app.py --keyword "industrial predictive maintenance AI startup" --
 
 ## Lessons Learned
 
-### 프롬프트 제약은 구체적인 나쁜 예시와 함께 써야 효과가 있다 (권세빈)
-"인라인 출처를 쓰지 마세요"만으로는 부족합니다. (What Does Allie Do? | PromptLoop) 같은 구체적인 패턴을 프롬프트에 명시해야 LLM이 실제로 피합니다. 또한 검색 기반 에이전트는 동일 도메인을 여러 번 참조하기 때문에 레퍼런스는 URL 기준 dedupe와 도메인당 개수 제한으로 반드시 후처리가 필요합니다. 함수 시그니처를 변경할 때는 호출부도 함께 확인해야 하며, 이는 팀 협업에서 특히 중요합니다.
-### State와 스키마 설계는 처음부터 제대로 정해야 한다 (김현문)
-초기에 evidence를 단순 string으로 수집했을 때의 한계를 보완하기 위해 EvidenceItem 클래스를 추가하고 rubric 기반 채점 기준을 적용하면서 결과 품질이 향상됐습니다. 나중에 고치기 어렵기 때문에 프로젝트 초반 설계가 중요합니다. 또한 각자의 역할을 문서로 명확히 나누고 에이전트가 서로의 영역을 침범하지 않도록 프롬프트를 작성하면, 충돌 없이 생산성이 올라가는 협업 환경을 만들 수 있습니다.
-### RAG는 검색 성능보다 목적에 맞는 근거 선별 설계가 핵심이다 (박동민)
-semantic similarity만으로는 특정 문서에 편중되거나 유사 문단이 반복되는 문제가 생깁니다. 문서마다 tech, market, manufacturing 태그를 부여하고 에이전트 역할별로 다르게 가져오도록 구성하면 분석 품질이 달라집니다. RAG에서는 검색 성능보다, 분석 목적에 맞게 근거를 구분하고 선별하는 설계가 더 중요합니다.
-### 멀티에이전트 시스템에서 중요한 것은 agent 수가 아니라 상태 설계다 (이주원)
-후보 스타트업 리스트, 현재 평가 대상, 누적 평가 이력, 최종 보고서 대상 기업을 명확히 분리하지 않으면 반복 평가 구조가 쉽게 꼬입니다. 실제 투자 검토는 단일 기업 평가가 아니라 여러 후보를 선별하는 과정에 가깝기 때문에, 추천 기업이 없을 때도 다음 후보를 계속 평가하고 최종적으로 대표 보류 기업과 보류 사유 요약을 생성하는 구조가 더 현실적인 워크플로우입니다.
-
+### 멀티에이전트 시스템에서 중요한 것은 agent 수가 아니라 상태 설계였습니다 (이주원)
+후보 스타트업 리스트, 현재 평가 대상, 누적 평가 이력, 최종 보고서 대상 기업을 명확히 분리하지 않으면 반복 평가 구조가 쉽게 꼬인다는 점을 경험했습니다. 또한 실제 투자 검토는 단일 기업 평가보다 여러 후보를 선별하는 과정에 가깝기 때문에, 추천 기업이 없을 때도 다음 후보를 계속 평가하고 최종적으로 대표 보류 기업과 보류 사유 요약을 생성하는 구조가 더 현실적인 워크플로우라고 생각했습니다.
+### RAG에서는 검색 성능보다 분석 목적에 맞는 근거 선별 설계가 더 중요했습니다 (박동민)
+처음에는 semantic similarity만으로 충분할 것이라 생각했지만, 실제로는 특정 문서에 편중되거나 비슷한 문단이 반복되는 문제가 있었습니다. 문서마다 tech, market, manufacturing 태그를 두고 에이전트 역할별로 다르게 가져오도록 구성하면서 분석 품질이 달라지는 것을 느꼈고, 검색 성능보다 설계가 먼저라는 점을 배웠습니다.
+### 프롬프트 제약은 구체적인 나쁜 예시와 함께 써야 효과가 있었습니다 (권세빈)
+"인라인 출처를 쓰지 마세요"만으로는 LLM이 (What Does Allie Do? | PromptLoop) 같은 패턴을 계속 생성했습니다. 구체적인 나쁜 예시를 프롬프트에 명시하고 나서야 실제로 줄어드는 것을 확인했습니다. 또한 검색 기반 에이전트는 동일 도메인을 반복 참조하기 때문에 레퍼런스 후처리가 반드시 필요했고, 함수 시그니처를 변경할 때 호출부를 함께 확인하지 않으면 팀 협업에서 바로 문제가 생긴다는 점도 경험했습니다.
+### State와 스키마 설계는 처음부터 제대로 잡는 것이 중요했습니다 (김현문)
+초기에 evidence를 단순 string으로 수집했을 때의 한계를 나중에서야 느끼고 EvidenceItem 클래스를 추가하고 rubric 기반 채점 기준을 적용하면서 결과 품질이 향상됐습니다. 또한 각자의 역할을 문서로 명확히 나누고 에이전트가 서로의 영역을 침범하지 않도록 프롬프트를 작성하면서, 이전 프로젝트에서 반복됐던 코드 충돌 없이 협업할 수 있었습니다.
 
 ## Contributors
-
-| 이름 | 담당 역할 |
-|-----|-----------|
-| 이주원 | Orchestration, Startup Search |
-| 박동민 | RAG Indexing, Retrieval |
-| 권세빈 | Analysis Agents |
-| 김현문 | Investment Decision, Report Writer |
+| <img width="180px" src="https://avatars.githubusercontent.com/juwonleee" /> | <img width="180px" src="https://avatars.githubusercontent.com/pushow" /> | <img width="180px" src="https://avatars.githubusercontent.com/sebeeeen" /> | <img width="180px" src="https://avatars.githubusercontent.com/hyeonyway" /> |
+|:---:|:---:|:---:|:---:|
+| Orchestration, Startup Search | RAG Indexing, Retrieval | Analysis Agents | Investment Decision, Report Writer | 
+| [이주원](https://github.com/juwonleee)| [박동민](https://github.com/pushow)| [권세빈](https://github.com/sebeeeen)| [김현문](https://github.com/hyeonyway)|
