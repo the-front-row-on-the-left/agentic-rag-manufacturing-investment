@@ -4,6 +4,34 @@
 
 > 단순 기업 소개가 아니라, 실제 투자 검토 관점에서 여러 후보를 선별하는 과정을 거치고 우선 검토 대상을 도출하는 것을 목표로 합니다.
 
+## 목차
+
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Architecture](#architecture)
+  - [Workflow Summary](#workflow-summary)
+- [RAG Pipeline](#rag-pipeline)
+  - [Pipeline Flow](#pipeline-flow)
+- [RAG vs Web Search](#rag-vs-web-search)
+- [RAG Data Sources](#rag-data-sources)
+- [Agent Roles](#agent-roles)
+- [Decision Framework](#decision-framework)
+- [Scoring Principles](#scoring-principles)
+- [Final Decision Types](#final-decision-types)
+- [Tech Stack](#tech-stack)
+  - [임베딩 모델](#embedding-model)
+- [Project Structure](#project-structure)
+- [Directory Guide](#directory-guide)
+- [Setup](#setup)
+- [Outputs](#outputs)
+- [Limitations](#limitations)
+- [Future Work](#future-work)
+- [Investment Report Highlights](#investment-report-highlights)
+- [Lessons Learned](#lessons-learned)
+- [Contributors](#contributors)
+
+## Overview
+
 
 ## Overview
 
@@ -152,6 +180,7 @@
 | Report Export | Markdown, WeasyPrint, matplotlib, numpy |
 | Package Manager | uv |
 
+<a id="embedding-model"></a>
 <details>
 <summary><h3>임베딩 모델</h3></summary>
 
@@ -212,6 +241,7 @@
 - `src/tools/` : 외부 웹 검색 도구  
 - `outputs/` : 최종 보고서와 상태 파일 저장 경로  
 
+<a id="setup"></a>
 <details>
 <summary><h2>Setup</h2></summary>
 
