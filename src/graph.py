@@ -57,7 +57,9 @@ def build_graph(settings: Settings):
     startup_search_agent = StartupSearchAgent(llm, settings, search_tool)
     company_summary_agent = CompanySummaryAgent(llm, settings, search_tool)
     tech_analysis_agent = TechAnalysisAgent(llm, settings, search_tool, rag_retriever)
-    market_analysis_agent = MarketAnalysisAgent(llm, settings, search_tool, rag_retriever)
+    market_analysis_agent = MarketAnalysisAgent(
+        llm, settings, search_tool, rag_retriever
+    )
     competitor_analysis_agent = CompetitorAnalysisAgent(llm, settings, search_tool)
     investment_decision_agent = InvestmentDecisionAgent(llm, settings)
     report_writer_agent = ReportWriterAgent(llm, settings)

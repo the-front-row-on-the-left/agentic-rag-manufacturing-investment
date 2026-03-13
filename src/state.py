@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from operator import add
-from typing import Any
-from typing import Annotated
+from typing import Annotated, Any
 
 from typing_extensions import TypedDict
 

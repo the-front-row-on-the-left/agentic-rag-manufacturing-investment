@@ -29,12 +29,17 @@ class ReportWriterAgent(BaseAgent):
         conditional_candidates = [
             item
             for item in evaluation_history
-            if item.get("investment_decision", {}).get("decision") == "conditional_review"
+            if item.get("investment_decision", {}).get("decision")
+            == "conditional_review"
         ]
-        candidate_pool = recommended_candidates or conditional_candidates or evaluation_history
+        candidate_pool = (
+            recommended_candidates or conditional_candidates or evaluation_history
+        )
         best = max(
             candidate_pool,
-            key=lambda item: float(item.get("investment_decision", {}).get("total_score", 0)),
+            key=lambda item: float(
+                item.get("investment_decision", {}).get("total_score", 0)
+            ),
         )
         is_hold_report = not recommended_candidates
 
@@ -77,11 +82,7 @@ class ReportWriterAgent(BaseAgent):
             if is_hold_report
             else "> 제조업 AI 스타트업 투자 평가"
         )
-        title_block = (
-            f"# {startup_name} 투자 검토 보고서\n"
-            f"{report_subtitle}\n\n"
-            "---\n\n"
-        )
+        title_block = f"# {startup_name} 투자 검토 보고서\n{report_subtitle}\n\n---\n\n"
 
         # 점수표 생성
         score_table = _build_score_table(best)
@@ -145,7 +146,7 @@ def _build_hold_summary(best: dict, evaluation_history: list[dict]) -> str:
 
     lines = [
         "## 전체 후보 미달 요약",
-        f"- 이번 배치는 투자 추천 기준 미달로 보류 처리되었습니다.",
+        "- 이번 배치는 투자 추천 기준 미달로 보류 처리되었습니다.",
         f"- 대표 보류 후보: {best_name} ({best_score}점)",
     ]
 
