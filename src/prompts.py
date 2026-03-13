@@ -216,6 +216,11 @@ pros/cons rules:
 - cons: list exactly 3 items. Each must be a specific, evidence-backed risk or weakness.
 - Do not repeat the same point in both pros and cons.
 - Use concise phrases, not full sentences.
+
+Language rules:
+- ALL criterion reasons MUST be written in Korean.
+- pros and cons MUST also be written in Korean.
+- Do NOT write reasons or pros/cons in English.
 """.strip()
 
 

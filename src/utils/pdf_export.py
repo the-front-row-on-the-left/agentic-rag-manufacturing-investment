@@ -377,21 +377,18 @@ def html_to_pdf(html_str: str, output_path: str | Path) -> None:
 
 
 # ── 통합 출력 ──────────────────────────────────────────────────────────
-def export_report(md_text: str, base_path: str | Path) -> dict[str, Path]:
-    base = Path(base_path)
-    md_path   = base.with_suffix(".md")
-    html_path = base.with_suffix(".html")
-    pdf_path  = base.with_suffix(".pdf")
+def export_report(
+    md_path: str | Path,
+    html_path: str | Path,
+    pdf_path: str | Path,
+) -> None:
+    """app.py 에서 호출하는 인터페이스.
 
-    md_path.write_text(md_text, encoding="utf-8")
+    md_path 에서 마크다운을 읽어 html_path / pdf_path 로 변환 저장.
+    """
+    md_text = Path(md_path).read_text(encoding="utf-8")
 
     html_str = md_to_html(md_text)
-    html_path.write_text(html_str, encoding="utf-8")
+    Path(html_path).write_text(html_str, encoding="utf-8")
 
-    try:
-        html_to_pdf(html_str, pdf_path)
-    except Exception as e:
-        print(f"[pdf_export] PDF 생성 실패: {e}")
-        pdf_path = None
-
-    return {"md": md_path, "html": html_path, "pdf": pdf_path}
+    html_to_pdf(html_str, pdf_path)
