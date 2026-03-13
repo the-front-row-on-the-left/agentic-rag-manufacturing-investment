@@ -203,6 +203,10 @@ When writing each criterion reason:
 - Ground the reason in evidence claims whenever available.
 - If evidence is weak or missing, explicitly score lower.
 
+Conservative cap rules (must apply):
+- If real customer deployment/traction evidence is missing or ambiguous, cap `deployability` and `scalability` at 3.
+- If required data availability/integration evidence is missing or ambiguous, cap `data_availability` and `integration` at 3.
+
 Use the following rubric:
 {EVALUATION_CRITERIA}
 
