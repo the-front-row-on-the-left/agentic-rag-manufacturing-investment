@@ -4,35 +4,6 @@
 
 > 단순 기업 소개가 아니라, 실제 투자 검토 관점에서 여러 후보를 선별하는 과정을 거치고 우선 검토 대상을 도출하는 것을 목표로 합니다.
 
-## 목차
-
-- [Overview](#overview)
-- [Key Features](#key-features)
-- [Architecture](#architecture)
-  - [Workflow Summary](#workflow-summary)
-- [RAG Pipeline](#rag-pipeline)
-  - [Pipeline Flow](#pipeline-flow)
-- [RAG vs Web Search](#rag-vs-web-search)
-- [RAG Data Sources](#rag-data-sources)
-- [Agent Roles](#agent-roles)
-- [Decision Framework](#decision-framework)
-- [Scoring Principles](#scoring-principles)
-- [Final Decision Types](#final-decision-types)
-- [Tech Stack](#tech-stack)
-  - [임베딩 모델](#embedding-model)
-- [Project Structure](#project-structure)
-- [Directory Guide](#directory-guide)
-- [Setup](#setup)
-- [Outputs](#outputs)
-- [Limitations](#limitations)
-- [Future Work](#future-work)
-- [Investment Report Highlights](#investment-report-highlights)
-- [Lessons Learned](#lessons-learned)
-- [Contributors](#contributors)
-
-## Overview
-
-
 ## Overview
 
 제조업 AI 스타트업은 기술 설명만으로 투자 가치를 판단하기 어렵습니다. 같은 AI 기술이라도 제조 현장에서는 데이터 확보 가능성, 설비 연동 난이도, 배포 방식, ROI, 산업별 적용성에 따라 사업성이 크게 달라집니다.
