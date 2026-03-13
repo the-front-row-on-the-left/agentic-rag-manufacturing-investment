@@ -82,3 +82,27 @@ def merge_rag_references(references: list[str]) -> list[str]:
         merged.append(f"{prefix} {page_text}{location}".strip())
 
     return merged + non_rag
+
+
+def dedupe_by_url(references: list[str]) -> list[str]:
+    """
+    URL이 동일한 레퍼런스 중복 제거.
+    URL 없는 항목(RAG 문서 등)은 전체 문자열 기준 중복 제거.
+    순서 유지.
+    """
+    seen_urls: set[str] = set()
+    seen_raw: set[str] = set()
+    result = []
+    for ref in references:
+        url_match = re.search(r'https?://\S+', ref)
+        if url_match:
+            url = url_match.group(0).rstrip('.,)')
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
+        else:
+            if ref in seen_raw:
+                continue
+            seen_raw.add(ref)
+        result.append(ref)
+    return result

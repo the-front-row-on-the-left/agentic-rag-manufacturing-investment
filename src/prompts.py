@@ -241,12 +241,15 @@ CRITICAL - Citation rules:
 - Do NOT write any inline citations, source references, or URLs anywhere in the body text.
 - Do NOT write patterns like ("source title", url), (source, url), (출처: ...), [출처], footnotes, or any parenthetical references.
 - Do NOT include hyperlinks in the body text.
+- Do NOT write source titles in parentheses at the end of sentences, e.g. (What Does Allie Do? | PromptLoop).  ← 이 줄 추가
 - All source attribution is handled exclusively in the REFERENCE section appended by the application.
 - Write claims as plain factual statements without any attribution markers.
 
 Bad example (NEVER do this):
-  제조업 다운타임은 전 세계적으로 약 10조 달러의 생산성 손실을 초래한다("출처 제목", https://example.com).
+  AllieML은 머신러닝 모델로 다운타임을 예측한다. (What Does Allie - AI for manufacturing Do? | Directory - PromptLoop)
+  제조업 다운타임은 약 10조 달러의 생산성 손실을 초래한다("출처 제목", https://example.com).
 
 Good example:
-  제조업 다운타임은 전 세계적으로 약 10조 달러의 생산성 손실을 초래한다.
+  AllieML은 머신러닝 모델로 다운타임을 예측한다.
+  제조업 다운타임은 약 10조 달러의 생산성 손실을 초래한다.
 """.strip()
