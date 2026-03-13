@@ -67,7 +67,7 @@ class InvestmentDecisionAgent(BaseAgent):
 
         if final_decision.decision == "recommend":
             updates["recommended_startups"] = [evaluation_record]
-        else:
+        elif final_decision.decision in {"conditional_review", "hold"}:
             updates["held_startups"] = [evaluation_record]
 
         return updates
