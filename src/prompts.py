@@ -216,6 +216,11 @@ pros/cons rules:
 - cons: list exactly 3 items. Each must be a specific, evidence-backed risk or weakness.
 - Do not repeat the same point in both pros and cons.
 - Use concise phrases, not full sentences.
+
+Language rules:
+- ALL criterion reasons MUST be written in Korean.
+- pros and cons MUST also be written in Korean.
+- Do NOT write reasons or pros/cons in English.
 """.strip()
 
 
@@ -236,12 +241,21 @@ CRITICAL - Citation rules:
 - Do NOT write any inline citations, source references, or URLs anywhere in the body text.
 - Do NOT write patterns like ("source title", url), (source, url), (출처: ...), [출처], footnotes, or any parenthetical references.
 - Do NOT include hyperlinks in the body text.
+- Do NOT write source titles in parentheses at the end of sentences, e.g. (What Does Allie Do? | PromptLoop). 
 - All source attribution is handled exclusively in the REFERENCE section appended by the application.
 - Write claims as plain factual statements without any attribution markers.
 
 Bad example (NEVER do this):
-  제조업 다운타임은 전 세계적으로 약 10조 달러의 생산성 손실을 초래한다("출처 제목", https://example.com).
+  AllieML은 머신러닝 모델로 다운타임을 예측한다. (What Does Allie - AI for manufacturing Do? | Directory - PromptLoop)
+  제조업 다운타임은 약 10조 달러의 생산성 손실을 초래한다("출처 제목", https://example.com).
 
 Good example:
-  제조업 다운타임은 전 세계적으로 약 10조 달러의 생산성 손실을 초래한다.
+  AllieML은 머신러닝 모델로 다운타임을 예측한다.
+  제조업 다운타임은 약 10조 달러의 생산성 손실을 초래한다.
+  
+Structure rules:
+- '## 대상 스타트업 개요' and '## 투자 판단 및 제언' sections: write in flowing prose paragraphs.
+- All other sections: use ### sub-headings and bullet points for clarity.
+- Do NOT write '## 대상 스타트업 개요' or '## 투자 판단 및 제언' as bullet lists.
+
 """.strip()

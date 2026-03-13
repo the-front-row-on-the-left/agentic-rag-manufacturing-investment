@@ -4,7 +4,7 @@ from src.agents.base import BaseAgent
 from src.prompts import REPORT_WRITER_SYSTEM
 from src.scoring import LABELS
 from src.state import GraphState
-from src.utils.references import dedupe_keep_order, merge_rag_references
+from src.utils.references import dedupe_keep_order, merge_rag_references, dedupe_by_url
 from src.utils.text import model_to_pretty_json
 
 
@@ -14,7 +14,8 @@ class ReportWriterAgent(BaseAgent):
         eval_refs = []
         for item in evaluation_history:
             eval_refs.extend(item.get("references", []))
-        references = merge_rag_references(dedupe_keep_order(eval_refs))
+        references = dedupe_by_url(merge_rag_references(dedupe_keep_order(eval_refs)))
+
 
         if not evaluation_history:
             report = "# SUMMARY\n\n평가된 스타트업이 없습니다.\n\n# REFERENCE\n\n- 없음"
@@ -39,7 +40,7 @@ class ReportWriterAgent(BaseAgent):
             "# SUMMARY\n"
             "## 제조업 AI 시장 배경\n"
             "## 대상 스타트업 개요\n"
-            "## 핵심 근거 (Evidence)\n"
+            "## 핵심 근거\n"
             "## 기술 및 현장 적용성 분석\n"
             "## 시장성 분석\n"
             "## 경쟁사 및 대체 솔루션 비교\n"
@@ -98,8 +99,8 @@ def _build_score_table(best: dict) -> str:
     decision_label = decision.get("decision", "")
 
     decision_map = {
-        "recommend": "✅ 투자 추천",
-        "conditional_review": "🔶 조건부 검토",
+        "recommend": "투자 추천",
+        "conditional_review": "조건부 검토",
         "hold": "⏸ 보류",
     }
 

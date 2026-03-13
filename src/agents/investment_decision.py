@@ -32,7 +32,8 @@ class InvestmentDecisionAgent(BaseAgent):
             f"{model_to_pretty_json(market_analysis)}\n\n"
             "[Competitor Analysis]\n"
             f"{model_to_pretty_json(competitor_analysis)}\n\n"
-            "For each criterion reason, reference the strongest matching evidence claims."
+            "For each criterion reason, reference the strongest matching evidence claims.\n"
+            "IMPORTANT: Write ALL reasons, pros, and cons in Korean only."
         )
 
         draft: InvestmentDecisionDraft = self.structured_invoke(
