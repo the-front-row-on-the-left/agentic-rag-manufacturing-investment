@@ -4,7 +4,6 @@ from collections import OrderedDict
 
 from src.schemas import CriterionAssessment, InvestmentDecision, InvestmentDecisionDraft
 
-
 WEIGHTS = OrderedDict(
     [
         ("problem_fit", 15),
