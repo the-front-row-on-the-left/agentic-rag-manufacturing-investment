@@ -63,6 +63,8 @@
 
 본 프로젝트의 RAG는 제조업 AI 스타트업 자체 정보를 직접 저장하는 용도보다, 제조업 현장 적용성, 시장 맥락, 도입 리스크를 보강하는 **도메인 지식 검색 레이어**로 사용됩니다.
 
+<img width="814" height="1112" alt="startup_agent_pipeline (1)" src="https://github.com/user-attachments/assets/033eca2e-c4ee-4e95-a93c-4bfd14770b82" />
+
 ## Pipeline Flow
 1. 제조업 관련 PDF 문서를 `data/rag_docs/`에 저장합니다.  
 2. 문서 메타데이터를 `manifest.json`으로 관리합니다.  
