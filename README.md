@@ -64,7 +64,6 @@
 본 프로젝트의 RAG는 제조업 AI 스타트업 자체 정보를 직접 저장하는 용도보다, 제조업 현장 적용성, 시장 맥락, 도입 리스크를 보강하는 **도메인 지식 검색 레이어**로 사용됩니다.
 
 ## Pipeline Flow
-
 1. 제조업 관련 PDF 문서를 `data/rag_docs/`에 저장합니다.  
 2. 문서 메타데이터를 `manifest.json`으로 관리합니다.  
 3. 문서를 청크 단위로 분할하고 임베딩을 생성합니다.  
@@ -312,10 +311,10 @@ uv run python app.py --keyword "industrial predictive maintenance AI startup" --
 
 | 파일 | 설명 | 산출물|
 |-----|-----|-----|
-| final_report_*.md | 최종 투자 검토 보고서 원본 ||
-| final_report_*.html | 브라우저 확인용 렌더링 결과 ||
-| final_report_*.pdf | 발표 및 공유용 문서 |[final_report_20260313_104944.pdf](https://github.com/user-attachments/files/25957801/final_report_20260313_104944.pdf)|
-| final_state_*.json | 그래프 실행 상태 및 누적 평가 결과 ||
+| final_report_*.md | 최종 투자 검토 보고서 원본 | [docs/outputs/final_report_20260313_104944.md](docs/outputs/final_report_20260313_104944.md) |
+| final_report_*.html | 브라우저 확인용 렌더링 결과 | [docs/outputs/final_report_20260313_104944.html](docs/outputs/final_report_20260313_104944.html) |
+| final_report_*.pdf | 발표 및 공유용 문서 | [docs/outputs/final_report_20260313_104944.pdf](docs/outputs/final_report_20260313_104944.pdf) |
+| final_state_*.json | 그래프 실행 상태 및 누적 평가 결과 | [docs/outputs/final_state_20260313_104944.json](docs/outputs/final_state_20260313_104944.json) |
 
 ---
 
