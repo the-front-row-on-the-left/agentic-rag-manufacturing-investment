@@ -3,7 +3,7 @@ from __future__ import annotations
 from src.agents.base import BaseAgent
 from src.prompts import TECH_ANALYSIS_SYSTEM
 from src.rag.retriever import AgenticRAGRetriever
-from src.schemas import StartupProfile, TechAnalysis
+from src.schemas import TechAnalysis
 from src.state import GraphState
 from src.tools.web_search import TavilySearchTool
 from src.utils.references import dedupe_keep_order

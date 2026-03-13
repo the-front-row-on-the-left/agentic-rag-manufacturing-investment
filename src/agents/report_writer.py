@@ -6,7 +6,7 @@ from src.agents.base import BaseAgent
 from src.prompts import REPORT_WRITER_SYSTEM
 from src.scoring import LABELS
 from src.state import GraphState
-from src.utils.references import dedupe_keep_order, merge_rag_references, dedupe_by_url
+from src.utils.references import dedupe_by_url, dedupe_keep_order, merge_rag_references
 from src.utils.text import model_to_pretty_json
 
 
@@ -17,7 +17,6 @@ class ReportWriterAgent(BaseAgent):
         for item in evaluation_history:
             eval_refs.extend(item.get("references", []))
         references = dedupe_by_url(merge_rag_references(dedupe_keep_order(eval_refs)))
-
 
         if not evaluation_history:
             report = "# SUMMARY\n\n평가된 스타트업이 없습니다.\n\n# REFERENCE\n\n- 없음"
@@ -191,6 +190,8 @@ def _extract_key_shortfall(decision: dict) -> str:
 def _sanitize_reason(reason: str) -> str:
     cleaned = str(reason).strip()
     cleaned = re.sub(r"\([^)]*(https?://|www\.)[^)]*\)", "", cleaned)
-    cleaned = re.sub(r"\(([^)]*출처[^)]*|[^)]*source[^)]*)\)", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(
+        r"\(([^)]*출처[^)]*|[^)]*source[^)]*)\)", "", cleaned, flags=re.IGNORECASE
+    )
     cleaned = re.sub(r"\s{2,}", " ", cleaned).strip()
     return cleaned

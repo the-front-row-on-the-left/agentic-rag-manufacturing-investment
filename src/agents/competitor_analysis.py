@@ -5,7 +5,6 @@ from src.prompts import COMPETITOR_ANALYSIS_SYSTEM
 from src.schemas import CompetitorAnalysis
 from src.state import GraphState
 from src.tools.web_search import TavilySearchTool
-from src.utils.references import dedupe_keep_order
 from src.utils.text import model_to_pretty_json
 
 
